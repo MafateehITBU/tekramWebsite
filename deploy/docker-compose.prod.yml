@@ -1,5 +1,7 @@
-# Tikram Arabia — production stack (localhost ports only; Mafateeh keeps 80/443)
+# Tikram Arabia — production stack (parallel to Mafateeh; project name must stay tikramarabia)
 # Website :9081 | Dashboard :9082 | API :9080
+
+name: tikramarabia
 
 services:
   postgres:
@@ -11,6 +13,11 @@ services:
       - tikram_pg:/var/lib/postgresql/data
     networks:
       - tikram
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   backend:
     build:
@@ -20,7 +27,8 @@ services:
     env_file:
       - ./config/backend.env
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     ports:
       - "9080:4000"
     networks:

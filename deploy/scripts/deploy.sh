@@ -10,7 +10,7 @@ if [[ ! -f deploy/config/backend.env || ! -f deploy/config/postgres.env ]]; then
   exit 1
 fi
 
-docker compose -f deploy/docker-compose.prod.yml up -d --build
+docker compose -p tikramarabia -f deploy/docker-compose.prod.yml up -d --build
 
 echo "Tikram Arabia deploy complete."
 echo "  Website   -> http://127.0.0.1:9081"

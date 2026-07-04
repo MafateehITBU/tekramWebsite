@@ -13,7 +13,7 @@ cd "$APP_DIR"
 if [[ ! -d .git ]]; then
   git clone "$REPO" .
 else
-  git pull origin main
+  echo "==> Repo already present, skipping git pull (run manually if needed)"
 fi
 
 echo "==> Creating config from examples (edit secrets before first deploy)"
