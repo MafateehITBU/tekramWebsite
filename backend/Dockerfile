@@ -22,7 +22,9 @@ ENV NODE_ENV=production
 COPY package*.json ./
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/src/generated ./dist/generated
+COPY --from=builder /app/src/generated ./src/generated
+COPY --from=builder /app/src/config ./src/config
+COPY --from=builder /app/scripts ./scripts
 COPY --from=builder /app/prisma ./prisma
 EXPOSE 4000
 CMD ["node", "dist/index.js"]
