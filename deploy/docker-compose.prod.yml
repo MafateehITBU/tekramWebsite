@@ -1,0 +1,57 @@
+# Tikram Arabia — production stack (localhost ports only; Mafateeh keeps 80/443)
+# Website :9081 | Dashboard :9082 | API :9080
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    env_file:
+      - ./config/postgres.env
+    volumes:
+      - tikram_pg:/var/lib/postgresql/data
+    networks:
+      - tikram
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ./config/backend.env
+    depends_on:
+      - postgres
+    ports:
+      - "9080:4000"
+    networks:
+      - tikram
+    command: >
+      sh -c "npm run db:deploy && npm run db:seed && node dist/index.js"
+
+  website:
+    build:
+      context: ../website
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: https://api.tikramarabia.com/api
+    restart: unless-stopped
+    ports:
+      - "9081:80"
+    networks:
+      - tikram
+
+  dashboard:
+    build:
+      context: ../admin-dashboard
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "9082:80"
+    networks:
+      - tikram
+
+networks:
+  tikram:
+
+volumes:
+  tikram_pg:

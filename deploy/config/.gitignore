@@ -1,0 +1,4 @@
+# Tikram secrets — create on VPS only; never commit real values.
+backend.env
+postgres.env
+github_token

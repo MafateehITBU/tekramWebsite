@@ -1,0 +1,25 @@
+name: Deploy Tikram Arabia
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, tikram]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Sync to /opt/tikramarabia
+        run: |
+          rsync -a --delete \
+            --exclude ".git" \
+            --exclude "node_modules" \
+            --exclude "deploy/config/backend.env" \
+            --exclude "deploy/config/postgres.env" \
+            ./ /opt/tikramarabia/
+
+      - name: Deploy Tikram containers
+        run: bash /opt/tikramarabia/deploy/scripts/deploy.sh
