@@ -12,6 +12,7 @@ import { notify } from '../../utils/notify.js'
 function fieldClassName(base, hasError) {
   return hasError ? `${base} contact-field--error` : base
 }
+// TEST
 
 /**
  * @param {{ message: string | undefined, id: string }} props
