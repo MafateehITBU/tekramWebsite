@@ -39,7 +39,8 @@ export function TestimonialCard({ item, locale }) {
             src={imageUrl}
             alt=""
             className="h-12 w-12 shrink-0 rounded-full object-cover sm:h-14 sm:w-14"
-            loading="lazy"
+            loading="eager"
+            fetchPriority="high"
             decoding="async"
           />
         ) : (

@@ -338,9 +338,11 @@ html.dark {
     animation: infinite-marquee-ltr var(--marquee-duration, 45s) linear infinite;
   }
 
-  .partners-marquee:hover .infinite-marquee-track--running,
-  .testimonials-marquee:hover .infinite-marquee-track--running {
-    animation-play-state: paused;
+  @media (hover: hover) and (pointer: fine) {
+    .partners-marquee:hover .infinite-marquee-track--running,
+    .testimonials-marquee:hover .infinite-marquee-track--running {
+      animation-play-state: paused;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

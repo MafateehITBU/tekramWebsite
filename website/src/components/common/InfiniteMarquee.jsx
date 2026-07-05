@@ -70,12 +70,26 @@ export function InfiniteMarquee({
     }
 
     measure()
+
+    const images = group.querySelectorAll('img')
+    const onImageReady = () => measure()
+    images.forEach((img) => {
+      if (!img.complete) {
+        img.addEventListener('load', onImageReady, { once: true })
+        img.addEventListener('error', onImageReady, { once: true })
+      }
+    })
+
     const observer = new ResizeObserver(measure)
     observer.observe(group)
     observer.observe(gap)
     window.addEventListener('resize', measure)
 
     return () => {
+      images.forEach((img) => {
+        img.removeEventListener('load', onImageReady)
+        img.removeEventListener('error', onImageReady)
+      })
       observer.disconnect()
       window.removeEventListener('resize', measure)
     }
