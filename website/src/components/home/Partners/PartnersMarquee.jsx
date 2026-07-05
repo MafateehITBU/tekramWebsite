@@ -15,7 +15,7 @@ function buildMarqueeSequence(partners) {
 
 function PartnerLogoBox({ name, logoUrl }) {
   return (
-    <div className="flex h-20 w-36 shrink-0 items-center justify-center rounded-2xl px-4 py-3 backdrop-blur-sm sm:h-24 sm:w-44 sm:px-5 sm:py-4">
+    <div className="flex h-20 w-36 shrink-0 items-center justify-center rounded-2xl bg-black/25 px-4 py-3 backdrop-blur-sm sm:h-24 sm:w-44 sm:px-5 sm:py-4">
       {logoUrl ? (
         <img
           src={logoUrl}
