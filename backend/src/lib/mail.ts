@@ -17,6 +17,23 @@ function notifyRecipients(): string[] {
     .filter(Boolean);
 }
 
+function formatSubmittedAt(date: Date): string {
+  const timeZone =
+    process.env.CONTACT_NOTIFY_TIMEZONE?.trim() || "Asia/Riyadh";
+
+  return new Intl.DateTimeFormat("en-GB", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+    timeZone,
+    timeZoneName: "short",
+  }).format(date);
+}
+
 export function smtpConfigured(): boolean {
   return Boolean(
     process.env.SMTP_HOST?.trim() &&
@@ -68,7 +85,7 @@ export async function sendContactNotification(
     `Email: ${submission.email}`,
     `Phone: ${submission.phoneNumber || "—"}`,
     `Service: ${submission.service || "—"}`,
-    `Submitted: ${submission.createdAt.toISOString()}`,
+    `Submitted: ${formatSubmittedAt(submission.createdAt)}`,
     "",
     "Message:",
     submission.inquiry,
