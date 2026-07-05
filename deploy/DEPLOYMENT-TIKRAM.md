@@ -130,3 +130,23 @@ cd /opt/tikramarabia
 git pull origin main
 bash deploy/scripts/deploy.sh
 ```
+
+## Tikram shows Mafateeh (wrong site on tikram domains)
+
+After recreating Mafateeh `reverse-proxy`, Tikram routing in nginx may be missing or stale.
+
+```bash
+bash /opt/tikramarabia/deploy/scripts/sync-tikram-nginx.sh
+```
+
+Or manually:
+
+```bash
+GW=$(docker compose -f /opt/mafateehwebsite/deploy/docker-compose.prod.yml exec -T reverse-proxy ip route | awk '/default/ {print $3}')
+sed "s/172\\.17\\.0\\.1/$GW/g" /opt/tikramarabia/deploy/nginx/templates/tikramarabia.conf \
+  > /opt/mafateehwebsite/deploy/nginx/conf.d/tikramarabia.conf
+cd /opt/mafateehwebsite
+docker compose -f deploy/docker-compose.prod.yml up -d --force-recreate reverse-proxy
+```
+
+Expected: page title **Tikram Arabia** (not Mafateeh).

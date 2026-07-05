@@ -21,7 +21,7 @@ export function Home() {
       <CompanySection />
       <PromoSection />
       <ProcessSection />
-      <PortfolioSection />
+      {/* <PortfolioSection /> */}
       <PartnersSection />
       <PricingSection />
       <TestimonialsSection />

@@ -30,7 +30,7 @@ export const ABOUT_PAGE_CONTENT = {
   en: {
     storyMissionHeading: 'Our Story & Mission',
     empowerBefore: 'Empowering Digital Growth Since',
-    empowerYear: '2018',
+    empowerYear: '2021',
     empowerAfter: '',
     empowerSubtitle:
       'We transform ideas into smart digital solutions that help businesses grow, scale, and succeed with confidence.',
@@ -60,9 +60,9 @@ export const ABOUT_PAGE_CONTENT = {
     journeyBefore: 'A Journey Defined by',
     journeyHighlight: 'Excellence',
     journeySubtitle:
-      'Founded in 2018, Tikram Arabia began with a singular focus: to bridge the gap between complex technology and business accessibility. We saw a world moving fast, but businesses struggling to keep up with the technical demands of a digital-first economy.\n \nWhat started as a small team of four passionate innovators has evolved into a full-service powerhouse, specializing in custom software development, high-impact media production, and strategic IT consulting.\n\n Today, we stand as a beacon of reliability and innovation, serving clients across three continents while maintaining the boutique, high-touch service that defined our first year. Our story is not just about our growth—it\'s about the milestones our clients have reached through our partnership.',
+      'Founded in 2021, Tikram Arabia began with a singular focus: to bridge the gap between complex technology and business accessibility. We saw a world moving fast, but businesses struggling to keep up with the technical demands of a digital-first economy.\n \nWhat started as a small team of four passionate innovators has evolved into a full-service powerhouse, specializing in custom software development, high-impact media production, and strategic IT consulting.\n\n Today, we stand as a beacon of reliability and innovation, serving clients across three continents while maintaining the boutique, high-touch service that defined our first year. Our story is not just about our growth—it\'s about the milestones our clients have reached through our partnership.',
     counters: [
-      { value: '2018', label: 'INCEPTION' },
+      { value: '2021', label: 'INCEPTION' },
       { value: '50+', label: 'SPECIALISTS' },
       { value: '15+', label: 'AWARDS' },
     ],
@@ -70,7 +70,7 @@ export const ABOUT_PAGE_CONTENT = {
   ar: {
     storyMissionHeading: 'قصتنا ورسالتنا',
     empowerBefore: 'نُمكّن النمو الرقمي منذ',
-    empowerYear: '2018',
+    empowerYear: '2021',
     empowerAfter: '',
     empowerSubtitle:
       'نحن نحول الأفكار إلى حلول رقمية ذكية تساعد الشركات على النمو والتوسع والنجاح بثقة.',
@@ -102,7 +102,7 @@ export const ABOUT_PAGE_CONTENT = {
     journeySubtitle:
       'تأسست شركة تكرم لحلول تكنولوجيا المعلومات والإعلام عام ٢٠١٨، وانطلقت بهدفٍ واحد: سد الفجوة بين التكنولوجيا المعقدة وإمكانية الوصول إليها في مجال الأعمال. لقد رأينا عالماً يتطور بسرعة، لكن الشركات تكافح لمواكبة المتطلبات التقنية لاقتصاد رقمي في المقام الأول.  \n\n ما بدأ كفريق صغير من أربعة مبتكرين شغوفين تطور إلى شركة متكاملة الخدمات، متخصصة في تطوير البرمجيات المخصصة وإنتاج الوسائط الإعلامية عالية التأثير والاستشارات الاستراتيجية في مجال تكنولوجيا المعلومات.  \n\n اليوم، نقف كمنارة للموثوقية والابتكار، نخدم عملاءنا في ثلاث قارات مع الحفاظ على الخدمة المتميزة والشخصية التي ميزت عامنا الأول. قصتنا لا تقتصر على نمونا فحسب، بل تتعداه إلى الإنجازات التي حققها عملاؤنا من خلال شراكتنا.',
     counters: [
-      { value: '2018', label: 'التأسيس' },
+      { value: '2021', label: 'التأسيس' },
       { value: '50+', label: 'خبراء' },
       { value: '15+', label: 'جوائز' },
     ],
