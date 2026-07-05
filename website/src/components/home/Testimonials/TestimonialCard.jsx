@@ -13,7 +13,7 @@ export function TestimonialCard({ item, locale }) {
   return (
     <article
       dir={isRtl ? 'rtl' : 'ltr'}
-      className="flex w-[min(100%,22rem)] shrink-0 flex-col rounded-xl border border-primary bg-card px-5 py-5 text-start shadow-sm dark:border-secondary sm:w-[26rem] lg:w-[25rem] sm:px-6 sm:py-6"
+      className="flex w-72 shrink-0 flex-col rounded-xl border border-primary bg-card px-5 py-5 text-start shadow-sm dark:border-secondary sm:w-80 sm:px-6 sm:py-6 lg:w-[22rem]"
     >
       <Icon
         icon="icon-park-outline:quote"
@@ -39,8 +39,7 @@ export function TestimonialCard({ item, locale }) {
             src={imageUrl}
             alt=""
             className="h-12 w-12 shrink-0 rounded-full object-cover sm:h-14 sm:w-14"
-            loading="eager"
-            fetchPriority="high"
+            loading="lazy"
             decoding="async"
           />
         ) : (

@@ -48,6 +48,10 @@ export function TestimonialsSection() {
           {copy.subtitle}
         </p>
 
+        {loading ? (
+          <p className="mt-10 font-body text-sm text-white/70">{copy.loading}</p>
+        ) : null}
+
         {error ? (
           <p className="mt-10 font-body text-sm text-white/80" role="alert">
             {error}
@@ -55,12 +59,8 @@ export function TestimonialsSection() {
         ) : null}
       </div>
 
-      {!error && (loading || testimonials.length > 0) ? (
-        <TestimonialsMarquee
-          testimonials={testimonials}
-          locale={locale}
-          skeleton={loading}
-        />
+      {!loading && !error && testimonials.length > 0 ? (
+        <TestimonialsMarquee testimonials={testimonials} locale={locale} />
       ) : null}
     </section>
   )
