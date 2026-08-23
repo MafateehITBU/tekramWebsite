@@ -1,8 +1,7 @@
-import { Suspense, useEffect } from 'react'
+import { Suspense, useLayoutEffect } from 'react'
 import { Header } from '../components/layout/Header.jsx'
 import { HeroSection } from '../components/home/Hero/HeroSection.jsx'
 import { lazyNamed } from '../utils/lazyNamed.js'
-import { isNarrowViewport, useAfterFirstPaint } from '../utils/useAfterFirstPaint.js'
 
 const ServicesSection = lazyNamed(
   () => import('../components/home/Services/ServicesSection.jsx'),
@@ -38,11 +37,13 @@ const BlogsSection = lazyNamed(
 )
 
 export function Home() {
-  const showRest = useAfterFirstPaint(isNarrowViewport() ? 6000 : 600)
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     document.documentElement.setAttribute('data-home', '')
-    return () => document.documentElement.removeAttribute('data-home')
+    document.documentElement.classList.add('app-ready')
+    return () => {
+      document.documentElement.removeAttribute('data-home')
+      document.documentElement.classList.remove('app-ready')
+    }
   }, [])
 
   return (
@@ -51,18 +52,16 @@ export function Home() {
       <main className="site-container text-white">
         <HeroSection />
       </main>
-      {showRest ? (
-        <Suspense fallback={null}>
-          <ServicesSection />
-          <CompanySection />
-          <PromoSection />
-          <ProcessSection />
-          <PartnersSection />
-          <PricingSection />
-          <TestimonialsSection />
-          <BlogsSection />
-        </Suspense>
-      ) : null}
+      <Suspense fallback={null}>
+        <ServicesSection />
+        <CompanySection />
+        <PromoSection />
+        <ProcessSection />
+        <PartnersSection />
+        <PricingSection />
+        <TestimonialsSection />
+        <BlogsSection />
+      </Suspense>
     </>
   )
 }

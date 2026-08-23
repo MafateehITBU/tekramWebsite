@@ -36,16 +36,32 @@
     <title>Tikram Arabia</title>
     <style>
       html,body{margin:0;background:#00502e;color:#fff}
-      #root{position:relative;z-index:0}
-      #lcp-hero{
-        position:absolute;z-index:40;left:1rem;right:1rem;top:6rem;
-        margin:0 auto;max-width:36rem;
-        font:700 1.875rem/1.25 system-ui,-apple-system,Segoe UI,sans-serif !important;
-        text-align:center;pointer-events:none;
+      #boot-shell{min-height:100dvh;background:#00502e}
+      .boot-header{
+        display:flex;align-items:center;height:3.5rem;padding:0 1rem;
+        background:#fefefe;border-bottom:1px solid #e0e0e0;
       }
-      html[dir=rtl] #lcp-hero{text-align:right}
-      @media (min-width:768px){#lcp-hero{display:none!important}}
-      html:not([data-home]) #lcp-hero{display:none!important}
+      html.dark .boot-header{background:#0d0d0d;border-color:#222}
+      .boot-header img{height:2.5rem;width:auto;max-width:8rem;object-fit:contain}
+      .boot-hero{
+        box-sizing:border-box;padding:2.5rem 1rem 2rem;max-width:36rem;margin:0 auto;
+        text-align:center;font-family:system-ui,-apple-system,Segoe UI,sans-serif;
+      }
+      html[dir=rtl] .boot-hero{text-align:right}
+      .boot-hero h1{margin:0;font:700 1.875rem/1.25 system-ui,-apple-system,Segoe UI,sans-serif}
+      .boot-line{margin:1.5rem 0 0;color:#dfb026;font:500 1.125rem/1.35 system-ui,sans-serif}
+      .boot-sub{margin:1.5rem 0 0;font:400 1rem/1.6 system-ui,sans-serif}
+      .boot-cta{margin-top:1.5rem;display:flex;flex-direction:column;gap:.75rem}
+      .boot-cta a{
+        display:flex;align-items:center;justify-content:center;min-height:3rem;
+        border:2px solid #fff;border-radius:.5rem;color:#fff;text-decoration:none;
+        font:600 1rem/1 system-ui,sans-serif;
+      }
+      .boot-quote{background:#dfb026}
+      .boot-start{background:#00502e}
+      @media (min-width:768px){#boot-shell{display:none!important}}
+      html:not([data-home]) #boot-shell,
+      html.app-ready #boot-shell{display:none!important}
     </style>
     <script type="application/ld+json">
       {
@@ -83,27 +99,17 @@
           document.head.appendChild(l)
         }
         try {
-          if (window.innerWidth >= 768) {
-            var p = document.createElement('link')
-            p.rel = 'preconnect'
-            p.href = 'https://fonts.googleapis.com'
-            document.head.appendChild(p)
-            var p2 = document.createElement('link')
-            p2.rel = 'preconnect'
-            p2.href = 'https://fonts.gstatic.com'
-            p2.crossOrigin = 'anonymous'
-            document.head.appendChild(p2)
-            addFonts()
-          } else {
-            var added = false
-            function addOnce() {
-              if (added) return
-              added = true
-              addFonts()
-            }
-            window.addEventListener('pointerdown', addOnce, { once: true })
-            setTimeout(addOnce, 10000)
-          }
+          var p = document.createElement('link')
+          p.rel = 'preconnect'
+          p.href = 'https://fonts.googleapis.com'
+          document.head.appendChild(p)
+          var p2 = document.createElement('link')
+          p2.rel = 'preconnect'
+          p2.href = 'https://fonts.gstatic.com'
+          p2.crossOrigin = 'anonymous'
+          document.head.appendChild(p2)
+          if (window.innerWidth >= 768) addFonts()
+          else window.addEventListener('load', function () { setTimeout(addFonts, 400) })
         } catch (_) {}
       })()
     </script>
@@ -118,13 +124,36 @@
         </p>
       </div>
     </noscript>
-    <p id="lcp-hero" role="heading" aria-level="1">In a World Full of Uncertainty…Choose Proven Results</p>
+    <div id="boot-shell">
+      <header class="boot-header">
+        <img src="/logo-02.webp" alt="Tikram Arabia" width="160" height="48" />
+      </header>
+      <div class="boot-hero">
+        <h1 id="boot-title">In a World Full of Uncertainty…Choose Proven Results</h1>
+        <p class="boot-line" id="boot-line">We Build Digital Solutions That Drive Real Growth &amp; Sales</p>
+        <p class="boot-sub" id="boot-sub">
+          At Tikram Arabia, we combine marketing, technology, and systems to create integrated experiences that strengthen your business and deliver measurable results.
+        </p>
+        <div class="boot-cta">
+          <a class="boot-quote" id="boot-quote" href="/contact">Get a Quote</a>
+          <a class="boot-start" id="boot-start" href="/contact">Start With Us</a>
+        </div>
+      </div>
+    </div>
     <div id="root"></div>
     <script>
       try {
         if (document.documentElement.lang === 'ar') {
-          var el = document.getElementById('lcp-hero')
-          if (el) el.textContent = 'وسط فوضى الاحتمالات… اختر النتائج المضمونة'
+          var t = document.getElementById('boot-title')
+          var line = document.getElementById('boot-line')
+          var sub = document.getElementById('boot-sub')
+          var q = document.getElementById('boot-quote')
+          var s = document.getElementById('boot-start')
+          if (t) t.textContent = 'وسط فوضى الاحتمالات… اختر النتائج المضمونة'
+          if (line) line.textContent = 'نبني حلولًا رقمية تساعد مشروعك على النمو وتحقيق مبيعات فعلية'
+          if (sub) sub.textContent = 'في تكرم، نجمع بين التسويق، التقنية، والأنظمة لنصنع تجربة متكاملة تمنح مشروعك حضورًا أقوى، أداءً أفضل، ونتائج يمكن قياسها.'
+          if (q) { q.textContent = 'اطلب عرض سعر'; q.href = '/ar/contact' }
+          if (s) { s.textContent = 'ابدأ معنا'; s.href = '/ar/contact' }
         }
       } catch (_) {}
     </script>

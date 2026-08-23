@@ -12,7 +12,7 @@ import {
   localeFromPathname,
   switchLocalePath,
 } from '../utils/localePaths.js'
-import { getHeroTitle } from '../content/heroTitle.js'
+import { getHeroBoot } from '../content/heroTitle.js'
 
 const STORAGE_KEY = 'tikram-arabia-locale'
 const LOCALE_FADE_MS = 280
@@ -34,8 +34,17 @@ export function LanguageProvider({ children }) {
     root.lang = locale === 'ar' ? 'ar' : 'en'
     root.dir = locale === 'ar' ? 'rtl' : 'ltr'
     localStorage.setItem(STORAGE_KEY, locale)
-    const lcp = document.getElementById('lcp-hero')
-    if (lcp) lcp.textContent = getHeroTitle(locale)
+    const boot = getHeroBoot(locale)
+    const title = document.getElementById('boot-title')
+    const line = document.getElementById('boot-line')
+    const sub = document.getElementById('boot-sub')
+    const quote = document.getElementById('boot-quote')
+    const start = document.getElementById('boot-start')
+    if (title) title.textContent = boot.title
+    if (line) line.textContent = boot.line
+    if (sub) sub.textContent = boot.subtitle
+    if (quote) quote.textContent = boot.quote
+    if (start) start.textContent = boot.start
   }, [locale])
 
   useEffect(() => {

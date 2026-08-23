@@ -9,8 +9,8 @@ alwaysApply: true
 - Marketing site is **React.js (Vite SPA)** on the existing **PERN** stack (PostgreSQL, Express, React, Node).
 - **SSR / Next.js / prerender / separate mobile stack are REJECTED.** Do not migrate the framework.
 - Route-level lazy loading crashed production when a chunk had an **undefined default export** (React #306). Use `lazyNamed()` in `website/src/utils/lazyNamed.js` only — it requires a real named function export. Do **not** add Vite `manualChunks`.
-- Homepage first paint is Header + Hero only. Below-fold Home sections, other pages, Footer, CTA, cookie banner, and AOS load as named-export chunks after idle.
-- Mobile LCP is the HTML `#lcp-hero` heading (outside `#root`, z-index 40, system font only). Do not cover it with `#root`, do not restyle it with web fonts, and do not paint larger late UI (cookie, hero extras, below-fold) until after 6–8s on narrow viewports. Particles stay off below 768px. App CSS is async.
+- Homepage first paint is `#boot-shell` (logo + full hero copy + CTAs) in `index.html`, then Header + full Hero as soon as React starts. Hide the shell with `app-ready` in `useLayoutEffect`. Do **not** delay logo, hero extras, footer, or sections with timers.
+- Below-fold Home sections, other pages, Footer, CTA, cookie banner, and AOS are named-export chunks that load immediately via Suspense. Particles stay off below 768px. App CSS is async.
 
 ## Domains & deploy
 - Site: `tikramarabia.com` (VPS `/opt/tikramarabia`, Docker `-p tikramarabia`)

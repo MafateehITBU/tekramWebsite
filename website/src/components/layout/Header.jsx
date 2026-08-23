@@ -8,7 +8,6 @@ import { useLocalePath } from '../../hooks/useLocalePath.js'
 import { isNavActive, usePathname } from '../../utils/pathname.js'
 import { LanguageFlag } from '../LanguageFlag.jsx'
 import { ThemeToggle } from '../ThemeToggle.jsx'
-import { isNarrowViewport, useAfterFirstPaint } from '../../utils/useAfterFirstPaint.js'
 
 const LOGO_COLOR = '/logo-02.webp'
 const MOBILE_MENU_BG = '#131313'
@@ -122,7 +121,6 @@ export function Header() {
   const homeHref = localePath('/')
   const contactLabel = isRtl ? 'تواصل معنا' : 'Contact us'
   const languagesLabel = isRtl ? 'اللغات' : 'Languages'
-  const showLogoImg = useAfterFirstPaint(isNarrowViewport() ? 6000 : 0)
 
   const closeMenu = useCallback(() => {
     const active = document.activeElement
@@ -277,31 +275,22 @@ export function Header() {
                 aria-label="Tikram Arabia"
                 onClick={closeMenu}
               >
-                {showLogoImg ? (
-                  <>
-                    <img
-                      src={LOGO_COLOR}
-                      alt=""
-                      className="h-10 w-auto max-w-[8rem] object-contain sm:h-11 sm:max-w-[9rem] md:h-15 md:max-w-[12rem] md:mr-8 dark:hidden"
-                      width={160}
-                      height={48}
-                      decoding="async"
-                      fetchPriority="low"
-                    />
-                    <img
-                      src={logoWhite}
-                      alt=""
-                      className="hidden h-10 w-auto max-w-[8rem] object-contain sm:h-11 sm:max-w-[9rem] md:h-15 md:max-w-[12rem] md:mr-8 dark:block"
-                      width={160}
-                      height={48}
-                      decoding="async"
-                    />
-                  </>
-                ) : (
-                  <span className="font-heading text-base font-bold text-foreground md:mr-8">
-                    Tikram
-                  </span>
-                )}
+                <img
+                  src={LOGO_COLOR}
+                  alt=""
+                  className="h-10 w-auto max-w-[8rem] object-contain sm:h-11 sm:max-w-[9rem] md:h-15 md:max-w-[12rem] md:mr-8 dark:hidden"
+                  width={160}
+                  height={48}
+                  decoding="async"
+                />
+                <img
+                  src={logoWhite}
+                  alt=""
+                  className="hidden h-10 w-auto max-w-[8rem] object-contain sm:h-11 sm:max-w-[9rem] md:h-15 md:max-w-[12rem] md:mr-8 dark:block"
+                  width={160}
+                  height={48}
+                  decoding="async"
+                />
               </Link>
 
               <nav
