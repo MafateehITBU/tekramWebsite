@@ -16,6 +16,7 @@ export function SiteBackground() {
   const [showParticles, setShowParticles] = useState(false)
 
   useEffect(() => {
+    if (window.innerWidth < 768) return undefined
     const start = () => setShowParticles(true)
     if (typeof window.requestIdleCallback === 'function') {
       const idle = window.requestIdleCallback(start, { timeout: 1800 })

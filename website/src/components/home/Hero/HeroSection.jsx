@@ -17,9 +17,15 @@ export function HeroSection() {
       ].join(' ')
 
   return (
-    <section className="relative flex min-h-[calc(100dvh-4.5rem)] w-full items-center py-10 sm:min-h-[calc(100dvh-5rem)] sm:py-14">
+    <section className="relative flex min-h-[calc(100dvh-4.5rem)] w-full items-start py-10 sm:min-h-[calc(100dvh-5rem)] sm:py-14 md:items-center">
       <div dir={isRtl ? 'rtl' : 'ltr'} className={containerClass}>
-        <h1 className="w-full font-heading text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-[2.75rem] lg:leading-[1.15]">
+        <div
+          className="invisible w-full font-heading text-3xl font-bold leading-tight sm:text-4xl md:hidden"
+          aria-hidden
+        >
+          {copy.title}
+        </div>
+        <h1 className="hidden w-full font-heading text-3xl font-bold leading-tight text-white sm:text-4xl md:block lg:text-[2.75rem] lg:leading-[1.15]">
           {copy.title}
         </h1>
 

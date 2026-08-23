@@ -1,7 +1,8 @@
-import { Suspense } from 'react'
+import { Suspense, useEffect } from 'react'
 import { Header } from '../components/layout/Header.jsx'
 import { HeroSection } from '../components/home/Hero/HeroSection.jsx'
 import { lazyNamed } from '../utils/lazyNamed.js'
+import { useAfterFirstPaint } from '../utils/useAfterFirstPaint.js'
 
 const ServicesSection = lazyNamed(
   () => import('../components/home/Services/ServicesSection.jsx'),
@@ -37,22 +38,31 @@ const BlogsSection = lazyNamed(
 )
 
 export function Home() {
+  const showRest = useAfterFirstPaint()
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-home', '')
+    return () => document.documentElement.removeAttribute('data-home')
+  }, [])
+
   return (
     <>
       <Header />
       <main className="site-container text-white">
         <HeroSection />
       </main>
-      <Suspense fallback={null}>
-        <ServicesSection />
-        <CompanySection />
-        <PromoSection />
-        <ProcessSection />
-        <PartnersSection />
-        <PricingSection />
-        <TestimonialsSection />
-        <BlogsSection />
-      </Suspense>
+      {showRest ? (
+        <Suspense fallback={null}>
+          <ServicesSection />
+          <CompanySection />
+          <PromoSection />
+          <ProcessSection />
+          <PartnersSection />
+          <PricingSection />
+          <TestimonialsSection />
+          <BlogsSection />
+        </Suspense>
+      ) : null}
     </>
   )
 }

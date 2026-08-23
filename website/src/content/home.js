@@ -1,3 +1,5 @@
+import { HERO_TITLE } from './heroTitle.js'
+
 /** @typedef {{ icon: string; title: string; description: string }} ServiceItem */
 
 /** @typedef {{ label: string; percent: number }} SkillItem */
@@ -74,7 +76,7 @@ const LOREM_AR =
 export const HOME_CONTENT = {
   en: {
     hero: {
-      title: 'In a World Full of Uncertainty…Choose Proven Results',
+      title: HERO_TITLE.en,
       subtitle:
         'At Tikram Arabia, we combine marketing, technology, and systems to create integrated experiences that strengthen your business and deliver measurable results.',
       getQuotes: 'Get a Quote',
@@ -219,7 +221,7 @@ export const HOME_CONTENT = {
   },
   ar: {
     hero: {
-      title: 'وسط فوضى الاحتمالات… اختر النتائج المضمونة',
+      title: HERO_TITLE.ar,
       subtitle:
         'في تكرم، نجمع بين التسويق، التقنية، والأنظمة لنصنع تجربة متكاملة تمنح مشروعك حضورًا أقوى، أداءً أفضل، ونتائج يمكن قياسها.',
       getQuotes: 'اطلب عرض سعر',

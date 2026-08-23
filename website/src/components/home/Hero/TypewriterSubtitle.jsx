@@ -58,9 +58,9 @@ export function TypewriterSubtitle({ className = '' }) {
   const [motionEnabled, setMotionEnabled] = useState(true)
 
   useEffect(() => {
-    setMotionEnabled(
-      !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
-    )
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const mobile = window.matchMedia('(max-width: 767px)').matches
+    setMotionEnabled(!reduce && !mobile)
   }, [])
 
   const animatedText = useTypewriter(copy.animated, motionEnabled)

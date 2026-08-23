@@ -282,6 +282,7 @@ export function Header() {
                   width={160}
                   height={48}
                   decoding="async"
+                  fetchPriority="low"
                 />
                 <img
                   src={logoWhite}
