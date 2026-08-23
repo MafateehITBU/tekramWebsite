@@ -3,9 +3,7 @@ const VERTICAL_OFFSET =
   'translate-y-10 sm:translate-y-12 md:translate-y-14 lg:translate-y-16'
 
 /**
- * Decorative hand — fixed in the viewport; stays put while scrolling.
- * Solid sections (section-solid) cover it when they pass over.
- * Public URLs so index.html can preload the LCP image before JS.
+ * Decorative hand as a CSS background (not an <img>) so it cannot become LCP.
  */
 export function DecorHand({ isRtl }) {
   return (
@@ -15,19 +13,10 @@ export function DecorHand({ isRtl }) {
       }`}
       aria-hidden
     >
-      <img
-        src="/hand.webp"
-        srcSet="/hand-sm.webp 720w, /hand.webp 1600w"
-        sizes="(max-width: 768px) 78vw, min(58vw, 52rem)"
-        alt=""
-        className={`block w-[min(78vw,40rem)] max-h-[92dvh] max-w-none select-none object-contain ${VERTICAL_OFFSET} sm:w-[min(68vw,44rem)] lg:w-[min(58vw,52rem)] ${
+      <div
+        className={`decor-hand block h-[min(78vw,40rem)] w-[min(78vw,40rem)] max-h-[92dvh] max-w-none bg-contain bg-center bg-no-repeat sm:h-[min(68vw,44rem)] sm:w-[min(68vw,44rem)] lg:h-[min(58vw,52rem)] lg:w-[min(58vw,52rem)] ${VERTICAL_OFFSET} ${
           isRtl ? '-scale-x-100' : ''
         }`}
-        width={832}
-        height={832}
-        fetchPriority="high"
-        decoding="async"
-        draggable={false}
       />
     </div>
   )

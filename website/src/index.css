@@ -127,6 +127,17 @@ html.dark {
     background-color: var(--color-primary);
   }
 
+  /* Decorative LCP-safe hand (CSS background, not <img>) */
+  .decor-hand {
+    background-image: url('/hand-sm.webp');
+  }
+
+  @media (min-width: 768px) {
+    .decor-hand {
+      background-image: url('/hand.webp');
+    }
+  }
+
   html.dark .site-decor-base {
     background-color: #0d0d0d;
   }

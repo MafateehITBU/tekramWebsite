@@ -18,10 +18,10 @@ export function SiteBackground() {
   useEffect(() => {
     const start = () => setShowParticles(true)
     if (typeof window.requestIdleCallback === 'function') {
-      const idle = window.requestIdleCallback(start, { timeout: 1200 })
+      const idle = window.requestIdleCallback(start, { timeout: 1800 })
       return () => window.cancelIdleCallback(idle)
     }
-    const timer = window.setTimeout(start, 400)
+    const timer = window.setTimeout(start, 600)
     return () => window.clearTimeout(timer)
   }, [])
 
