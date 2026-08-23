@@ -9,8 +9,9 @@ alwaysApply: true
 - Marketing site is **React.js (Vite SPA)** on the existing **PERN** stack (PostgreSQL, Express, React, Node).
 - **SSR / Next.js / prerender / separate mobile stack are REJECTED.** Do not migrate the framework.
 - Route-level lazy loading crashed production when a chunk had an **undefined default export** (React #306). Use `lazyNamed()` in `website/src/utils/lazyNamed.js` only — it requires a real named function export. Do **not** add Vite `manualChunks`.
-- Mobile homepage hero stays in HTML `#boot-shell`. Desktop never shows that shell (`is-desktop` + min-width 768). React `HeroSection` is hidden on phones with an inline CSS class, not a JS viewport hook. Do not load the main CSS asynchronously (desktop CLS). Do **not** delay content with timers.
-- Below-fold Home sections, other pages, Footer, CTA, cookie banner, and AOS are named-export chunks that load immediately via Suspense. Particles stay off below 768px. App CSS is async.
+- Mobile homepage hero stays in HTML `#boot-shell`. Desktop never shows that shell (`is-desktop` + min-width 768). React `HeroSection` is hidden on phones with an inline CSS class, not a JS viewport hook. Do **not** delay content with timers.
+- Main CSS is **blocking on desktop** (keeps CLS ~0). Below 768px the same file is `media=print` + `onload` so the HTML hero can paint before Tailwind arrives. Do not make CSS async on desktop.
+- Below-fold Home sections, other pages, Footer, CTA, cookie banner, and AOS are named-export chunks that load immediately via Suspense. Particles stay off below 768px.
 
 ## Domains & deploy
 - Site: `tikramarabia.com` (VPS `/opt/tikramarabia`, Docker `-p tikramarabia`)
