@@ -42,6 +42,7 @@ services:
       dockerfile: Dockerfile
       args:
         VITE_API_BASE_URL: https://api.tikramarabia.com/api
+        VITE_SITE_URL: https://tikramarabia.com
     restart: unless-stopped
     ports:
       - "9081:80"

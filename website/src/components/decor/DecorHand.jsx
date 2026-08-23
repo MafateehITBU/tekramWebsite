@@ -1,6 +1,6 @@
-import handImg from '../../assets/imgs/hand.png'
+import handImg from '../../assets/imgs/hand.webp'
 
-/** Optical offset below flex center (PNG has extra space above the hand) */
+/** Optical offset below flex center (image has extra space above the hand) */
 const VERTICAL_OFFSET =
   'translate-y-10 sm:translate-y-12 md:translate-y-14 lg:translate-y-16'
 

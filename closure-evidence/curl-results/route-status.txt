@@ -1,0 +1,11 @@
+# Production curl audit — 2026-08-20 11:55 UTC
+# Commit (local): 335cd15
+
+200	https://www.tikramarabia.com/
+200	https://www.tikramarabia.com/contact
+200	https://www.tikramarabia.com/robots.txt
+200	https://www.tikramarabia.com/sitemap.xml
+200	https://www.tikramarabia.com/ar/about
+200	https://www.tikramarabia.com/invalid-xyz-123
+200	https://www.tikramarabia.com/wp-admin
+200	https://www.tikramarabia.com/blogs/how-to-reduce-operating-costs-with-technology-solutions

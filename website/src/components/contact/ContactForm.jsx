@@ -4,6 +4,7 @@ import api from '../../axiosConfig.js'
 import { getApiErrorMessage } from '../../utils/apiError.js'
 import { validateContactForm } from '../../utils/contactFormValidation.js'
 import { notify } from '../../utils/notify.js'
+import { trackGaEvent } from '../../utils/analyticsConsent.js'
 
 /**
  * @param {string} base
@@ -79,6 +80,7 @@ export function ContactForm({ copy, locale }) {
         inquiry: inquiry.trim(),
       })
       notify.success(copy.success)
+      trackGaEvent('generate_lead', { method: 'contact_form' })
       setName('')
       setPhoneNumber('')
       setEmail('')

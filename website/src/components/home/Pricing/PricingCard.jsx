@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react'
 import { MultilineText } from '../../common/MultilineText.jsx'
+import { LocalizedLink } from '../../common/LocalizedLink.jsx'
 import { getPackageLabels } from './packageLocale.js'
 
 /**
@@ -44,12 +45,12 @@ export function PricingCard({ pkg, locale, isActive, requestQuoteLabel }) {
         </MultilineText>
       ) : null}
 
-      <a
-        href="/contact"
+      <LocalizedLink
+        to="/contact"
         className="mx-auto mt-8 inline-flex min-h-10 w-auto items-center justify-center rounded-lg bg-secondary px-5 py-2 font-body text-sm font-semibold text-white transition-opacity hover:opacity-90"
       >
         {requestQuoteLabel}
-      </a>
+      </LocalizedLink>
 
       {isActive && <div className="mt-4 mb-2 h-px w-full bg-line" aria-hidden />}
 

@@ -6,9 +6,14 @@ const DRIFT_RADIUS = 30
 const SPEED = 0.14
 const ANGLE_INTERVAL_MS = 3000
 const MOBILE_MAX_WIDTH = 767
+const MOBILE_PARTICLE_COUNT = 48
+const DESKTOP_PARTICLE_COUNT = 110
+const DESKTOP_RETINA_PARTICLE_COUNT = 100
 
 function particleCountForWidth(width) {
-  return width <= MOBILE_MAX_WIDTH ? 65 : 200
+  if (width <= MOBILE_MAX_WIDTH) return MOBILE_PARTICLE_COUNT
+  const dpr = Math.min(window.devicePixelRatio || 1, 2)
+  return dpr >= 2 ? DESKTOP_RETINA_PARTICLE_COUNT : DESKTOP_PARTICLE_COUNT
 }
 
 function linkDistanceForWidth(width) {

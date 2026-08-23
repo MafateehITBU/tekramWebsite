@@ -1,5 +1,6 @@
 import { useLanguage } from '../../../context/useLanguage.js'
 import { getHomeContent } from '../../../content/index.js'
+import { LocalizedLink } from '../../common/LocalizedLink.jsx'
 import { HeroSocialLinks } from './HeroSocialLinks.jsx'
 import { TypewriterSubtitle } from './TypewriterSubtitle.jsx'
 
@@ -38,18 +39,18 @@ export function HeroSection() {
               : 'max-w-md items-stretch md:max-w-none md:flex-row md:justify-start md:gap-5',
           ].join(' ')}
         >
-          <a
-            href="/contact"
+          <LocalizedLink
+            to="/contact"
             className="inline-flex w-full items-center justify-center rounded-lg border-2 border-white bg-secondary px-6 py-3 font-body text-base font-semibold text-white transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white md:w-auto md:min-w-[10.5rem]"
           >
             {copy.getQuotes}
-          </a>
-          <a
-            href="/contact"
+          </LocalizedLink>
+          <LocalizedLink
+            to="/contact"
             className="inline-flex w-full items-center justify-center rounded-lg border-2 border-white bg-primary px-6 py-3 font-body text-base font-semibold text-white transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white dark:bg-background dark:hover:bg-background/90 md:w-auto md:min-w-[10.5rem]"
           >
             {copy.getStarted}
-          </a>
+          </LocalizedLink>
         </div>
       </div>
     </section>

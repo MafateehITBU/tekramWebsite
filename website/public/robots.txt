@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+Disallow: /api/
+Disallow: /.env
+Disallow: /wp-admin/
+Disallow: /wp-login.php
+
+Sitemap: https://tikramarabia.com/sitemap.xml

@@ -1,9 +1,9 @@
 import { Icon } from '@iconify/react'
-import { Link } from 'react-router-dom'
 import logoWhite from '../../assets/imgs/logo-white.png'
 import { getFooterContent } from '../../content/footer.js'
 import { useLanguage } from '../../context/useLanguage.js'
 import { useStaticInfo } from '../../context/StaticInfoContext.jsx'
+import { LocalizedLink } from '../common/LocalizedLink.jsx'
 
 const CONTACT_ICONS = {
   address: 'mdi:map-marker-outline',
@@ -76,12 +76,12 @@ export function Footer() {
             <ul className="flex flex-col gap-2.5">
               {copy.nav.map((item) => (
                 <li key={item.key}>
-                  <Link
+                  <LocalizedLink
                     to={item.href}
                     className="font-body text-sm text-white transition-colors hover:text-secondary"
                   >
                     {item.label}
-                  </Link>
+                  </LocalizedLink>
                 </li>
               ))}
             </ul>

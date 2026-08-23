@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom'
+import { LocalizedLink } from '../common/LocalizedLink.jsx'
+import { optimizeMediaUrl } from '../../utils/mediaUrl.js'
 import { formatBlogDate, pickLocalized } from '../home/Blogs/blogLocale.js'
 
 /**
@@ -11,13 +12,13 @@ import { formatBlogDate, pickLocalized } from '../home/Blogs/blogLocale.js'
 export function MostReadBlogRow({ item, locale, readCountLabel }) {
   const slug = String(item.slug ?? '')
   const title = pickLocalized(locale, item.title, item.titleAr)
-  const imageUrl = item.img
+  const imageUrl = optimizeMediaUrl(item.img, { width: 320 })
   const createdAt = formatBlogDate(String(item.createdAt ?? ''), locale)
   const readCount = typeof item.readCount === 'number' ? item.readCount : 0
 
   return (
     <li>
-      <Link
+      <LocalizedLink
         to={`/blogs/${slug}`}
         className="group flex gap-3 py-4 transition-colors sm:gap-4"
       >
@@ -44,7 +45,7 @@ export function MostReadBlogRow({ item, locale, readCountLabel }) {
             <span className="shrink-0 tabular-nums">{readCountLabel(readCount)}</span>
           </div>
         </div>
-      </Link>
+      </LocalizedLink>
       <span className="block h-px w-full bg-line" aria-hidden />
     </li>
   )

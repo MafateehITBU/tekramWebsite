@@ -1,6 +1,6 @@
 import { motion, useReducedMotion } from 'framer-motion'
-import { Link } from 'react-router-dom'
 import { Header } from '../components/layout/Header.jsx'
+import { LocalizedLink } from '../components/common/LocalizedLink.jsx'
 import { useLanguage } from '../context/useLanguage.js'
 import { getNotFoundContent } from '../content/notFound.js'
 
@@ -101,12 +101,12 @@ export function NotFound() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.5, ease: EASE }}
           >
-            <Link
+            <LocalizedLink
               to="/"
               className="mt-10 inline-flex min-h-11 min-w-[10.5rem] items-center justify-center rounded-lg bg-secondary px-8 py-3 font-body text-base font-semibold text-white shadow-sm transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
               {copy.homeLabel}
-            </Link>
+            </LocalizedLink>
           </motion.div>
         </div>
       </section>

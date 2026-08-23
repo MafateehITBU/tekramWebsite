@@ -1,4 +1,5 @@
 import { MultilineText } from '../../common/MultilineText.jsx'
+import { optimizeMediaUrl } from '../../../utils/mediaUrl.js'
 import { getPortfolioLabels } from './portfolioLocale.js'
 
 /**
@@ -6,7 +7,7 @@ import { getPortfolioLabels } from './portfolioLocale.js'
  */
 export function PortfolioCard({ item, locale }) {
   const { title, shortDescription, categoryName } = getPortfolioLabels(locale, item)
-  const imageUrl = item.featuredImageUrl
+  const imageUrl = optimizeMediaUrl(item.featuredImageUrl, { width: 1200 })
   const link = typeof item.link === 'string' && item.link.trim() ? item.link.trim() : null
 
   const inner = (

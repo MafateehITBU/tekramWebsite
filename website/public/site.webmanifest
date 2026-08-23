@@ -1,0 +1,27 @@
+{
+  "name": "Tikram Arabia",
+  "short_name": "Tikram",
+  "description": "IT solutions, digital marketing, and branding in Saudi Arabia.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#00502e",
+  "theme_color": "#00502e",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/logo-02.webp",
+      "sizes": "192x192",
+      "type": "image/webp"
+    },
+    {
+      "src": "/logo-02.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo-02.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

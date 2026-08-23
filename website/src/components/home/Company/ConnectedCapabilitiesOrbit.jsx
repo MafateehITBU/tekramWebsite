@@ -7,6 +7,7 @@ import {
 } from 'framer-motion'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useLocalePath } from '../../../hooks/useLocalePath.js'
 
 const DOT_COUNT = 14
 /** Golden focal ring radius in SVG units (viewBox 1000×1000). */
@@ -255,6 +256,7 @@ export function ConnectedCapabilitiesOrbit({
   textRtl = false,
 }) {
   const reduceMotion = useReducedMotion()
+  const localePath = useLocalePath()
   const viewportRef = useRef(/** @type {HTMLDivElement | null} */ (null))
   const [orbitRadius, setOrbitRadius] = useState(280)
   const [rotation, setRotation] = useState(0)
@@ -320,21 +322,17 @@ export function ConnectedCapabilitiesOrbit({
       const y = Math.sin(rad) * orbitRadius
 
       let opacity = 1
-      let blurPx = 0
 
       if (inFrame) {
         opacity = 1
-        blurPx = 0
       } else if (dist < FRAME_APPROACH_DEG) {
         const t = (dist - FRAME_PASS_DEG) / (FRAME_APPROACH_DEG - FRAME_PASS_DEG)
-        opacity = 0.45 + (1 - t) * 0.55
-        blurPx = t * 0.65
+        opacity = 0.4 + (1 - t) * 0.6
       } else {
-        opacity = 0.35 + (1 - Math.min(dist, 85) / 85) * 0.5
-        blurPx = Math.min(2, dist / 32)
+        opacity = 0.28 + (1 - Math.min(dist, 85) / 85) * 0.52
       }
 
-      return { item, index, x, y, opacity, blurPx, inFrame, dist }
+      return { item, index, x, y, opacity, inFrame, dist }
     })
   }, [items, rotation, orbitRadius, activeSlot])
 
@@ -389,7 +387,7 @@ export function ConnectedCapabilitiesOrbit({
               .join(' ')}
             aria-hidden={false}
           >
-            {orbitNodes.map(({ item, index, x, y, opacity, blurPx, inFrame }) => (
+            {orbitNodes.map(({ item, index, x, y, opacity, inFrame }) => (
               <div
                 key={`${index}-${item.href}`}
                 className={[
@@ -411,14 +409,11 @@ export function ConnectedCapabilitiesOrbit({
                   ]
                     .filter(Boolean)
                     .join(' ')}
-                  style={{
-                    opacity,
-                    filter: inFrame || blurPx <= 0.15 ? undefined : `blur(${blurPx}px)`,
-                  }}
+                  style={{ opacity }}
                 >
                   {inFrame ? (
                     <Link
-                      to={item.href}
+                      to={localePath(item.href)}
                       className="capabilities-orbit__orbit-label capabilities-orbit__orbit-label--in-frame"
                       dir={labelDir}
                       lang={textRtl ? 'ar' : undefined}

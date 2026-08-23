@@ -1,5 +1,6 @@
 import { getCtaContent } from '../../content/cta.js'
 import { useLanguage } from '../../context/useLanguage.js'
+import { LocalizedLink } from '../common/LocalizedLink.jsx'
 
 /**
  * Shared CTA band — NOT `section-solid`. Rendered by `SiteShell` on most inner routes.
@@ -29,12 +30,12 @@ export function CtaSection() {
         <p className="max-w-2xl font-body text-base leading-relaxed text-white/90 sm:text-lg">
           {copy.subtitle}
         </p>
-        <a
-          href="/contact"
+        <LocalizedLink
+          to="/contact"
           className="mt-1 inline-flex min-h-11 items-center justify-center rounded-lg border-2 border-white bg-secondary px-8 py-2.5 font-body text-sm font-semibold text-white transition-colors duration-300 hover:bg-transparent sm:text-base"
         >
           {copy.button}
-        </a>
+        </LocalizedLink>
       </div>
     </section>
   )

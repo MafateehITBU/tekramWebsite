@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
 import api from '../../../axiosConfig.js'
 import { useLanguage } from '../../../context/useLanguage.js'
 import { getHomeContent } from '../../../content/index.js'
 import { getApiErrorMessage } from '../../../utils/apiError.js'
+import { LocalizedLink } from '../../common/LocalizedLink.jsx'
 import { BlogCard } from './BlogCard.jsx'
 import { isPublishedBlog } from './blogLocale.js'
 
@@ -50,12 +50,12 @@ export function BlogsSection() {
           >
             {copy.heading}
           </h2>
-          <Link
+          <LocalizedLink
             to="/blogs"
             className="inline-flex min-h-11 shrink-0 items-center justify-center self-start rounded-lg bg-primary px-6 py-2.5 font-body text-sm font-semibold text-white transition-colors duration-200 hover:bg-secondary sm:self-center"
           >
             {copy.viewAll}
-          </Link>
+          </LocalizedLink>
         </div>
 
         {loading ? (

@@ -6,19 +6,15 @@ import {
   useRef,
   useState,
 } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { LanguageContext } from './languageContext.js'
+import {
+  localeFromPathname,
+  switchLocalePath,
+} from '../utils/localePaths.js'
 
 const STORAGE_KEY = 'tikram-arabia-locale'
 const LOCALE_FADE_MS = 280
-
-/** @returns {'en' | 'ar'} */
-function readStoredLocale() {
-  if (typeof window === 'undefined') return 'en'
-  const raw = localStorage.getItem(STORAGE_KEY)
-  if (raw === 'ar' || raw === 'en') return raw
-  const nav = navigator.language || ''
-  return nav.toLowerCase().startsWith('ar') ? 'ar' : 'en'
-}
 
 function prefersReducedMotion() {
   if (typeof window === 'undefined') return false
@@ -26,7 +22,9 @@ function prefersReducedMotion() {
 }
 
 export function LanguageProvider({ children }) {
-  const [locale, setLocaleState] = useState(readStoredLocale)
+  const location = useLocation()
+  const navigate = useNavigate()
+  const locale = localeFromPathname(location.pathname)
   const [contentVisible, setContentVisible] = useState(true)
   const timeoutRef = useRef(/** @type {ReturnType<typeof setTimeout> | null} */ (null))
 
@@ -52,36 +50,46 @@ export function LanguageProvider({ children }) {
     [],
   )
 
-  const setLocale = useCallback(
-    /** @param {'en' | 'ar' | ((prev: 'en' | 'ar') => 'en' | 'ar')} next */
-    (next) => {
-      const resolved =
-        typeof next === 'function' ? next(locale) : next
-      if (resolved !== 'en' && resolved !== 'ar') return
-      if (resolved === locale) return
+  const navigateToLocale = useCallback(
+    /** @param {'en' | 'ar'} targetLocale */
+    (targetLocale, { animate = false } = {}) => {
+      const nextPath =
+        switchLocalePath(location.pathname, targetLocale) +
+        location.search +
+        location.hash
 
-      if (timeoutRef.current) clearTimeout(timeoutRef.current)
-
-      if (prefersReducedMotion()) {
-        setLocaleState(resolved)
+      if (!animate || prefersReducedMotion()) {
+        navigate(nextPath)
         setContentVisible(true)
         return
       }
 
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
       setContentVisible(false)
       timeoutRef.current = setTimeout(() => {
-        setLocaleState(resolved)
+        navigate(nextPath)
         requestAnimationFrame(() => {
           setContentVisible(true)
         })
       }, LOCALE_FADE_MS)
     },
-    [locale],
+    [location.hash, location.pathname, location.search, navigate],
+  )
+
+  const setLocale = useCallback(
+    /** @param {'en' | 'ar' | ((prev: 'en' | 'ar') => 'en' | 'ar')} next */
+    (next) => {
+      const resolved = typeof next === 'function' ? next(locale) : next
+      if (resolved !== 'en' && resolved !== 'ar') return
+      if (resolved === locale) return
+      navigateToLocale(resolved, { animate: true })
+    },
+    [locale, navigateToLocale],
   )
 
   const toggleLocale = useCallback(() => {
-    setLocale(locale === 'ar' ? 'en' : 'ar')
-  }, [locale, setLocale])
+    navigateToLocale(locale === 'ar' ? 'en' : 'ar', { animate: true })
+  }, [locale, navigateToLocale])
 
   const value = useMemo(
     () => ({

@@ -4,7 +4,9 @@ COPY package*.json ./
 RUN npm ci
 COPY . .
 ARG VITE_API_BASE_URL=https://api.tikramarabia.com/api
+ARG VITE_SITE_URL=https://tikramarabia.com
 ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
+ENV VITE_SITE_URL=${VITE_SITE_URL}
 RUN npm run build
 
 FROM nginx:1.27-alpine

@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react'
 import { useLanguage } from '../../../context/useLanguage.js'
 import { getHomeContent } from '../../../content/index.js'
+import { LocalizedLink } from '../../common/LocalizedLink.jsx'
 
 function PromoFeatureCard({ icon, lines }) {
   return (
@@ -50,12 +51,12 @@ export function PromoSection() {
               {promo.subtitle}
             </p>
             <div className="mt-2 flex w-full justify-center lg:justify-start">
-              <a
-                href="/contact"
+              <LocalizedLink
+                to="/contact"
                 className="inline-flex min-h-12 items-center justify-center rounded-lg border-2 border-white bg-secondary px-8 py-3 font-body text-[0.9375rem] font-semibold text-white transition-colors duration-200 hover:bg-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:text-[0.9375rem]"
               >
                 {promo.getStarted}
-              </a>
+              </LocalizedLink>
             </div>
           </div>
         </div>

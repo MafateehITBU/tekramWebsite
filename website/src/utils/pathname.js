@@ -18,12 +18,14 @@ export function usePathname() {
   return useSyncExternalStore(subscribeToPathname, getPathname, () => '/')
 }
 
+import { stripLocalePrefix } from './localePaths.js'
+
 /**
- * @param {string} href
- * @param {string} pathname
+ * @param {string} href — logical path (no /ar prefix)
+ * @param {string} pathname — full pathname from the router
  */
 export function isNavActive(href, pathname) {
-  const p = pathname.replace(/\/$/, '') || '/'
+  const p = stripLocalePrefix(pathname).replace(/\/$/, '') || '/'
   const h = href.replace(/\/$/, '') || '/'
   if (h === '/') return p === '/' || p === ''
   return p === h || p.startsWith(`${h}/`)

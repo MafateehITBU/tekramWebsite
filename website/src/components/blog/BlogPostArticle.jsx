@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react'
 import { RichHtmlContent } from '../common/RichHtmlContent.jsx'
+import { optimizeMediaUrl } from '../../utils/mediaUrl.js'
 
 /**
  * @param {{
@@ -56,7 +57,7 @@ export function BlogPostArticle({
 
       {featuredImageUrl ? (
         <img
-          src={String(featuredImageUrl)}
+          src={optimizeMediaUrl(featuredImageUrl, { width: 1400 })}
           alt=""
           className="mx-auto mt-6 block max-h-[28rem] w-full max-w-3xl rounded-xl object-cover"
           loading="lazy"

@@ -1,16 +1,22 @@
-import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useEffect, useMemo, useState } from 'react'
+import { useLocation, useParams } from 'react-router-dom'
 import api from '../axiosConfig.js'
 import { BlogPostArticle } from '../components/blog/BlogPostArticle.jsx'
 import { BlogPostSidebar } from '../components/blog/BlogPostSidebar.jsx'
+import { LocalizedLink } from '../components/common/LocalizedLink.jsx'
 import { Header } from '../components/layout/Header.jsx'
 import { getBlogPostContent } from '../content/blogPost.js'
 import { getHomeContent } from '../content/index.js'
 import { useLanguage } from '../context/useLanguage.js'
 import { formatBlogDate, getBlogLabels } from '../components/home/Blogs/blogLocale.js'
+import { SeoHead } from '../seo/SeoHead.jsx'
+import { optimizeMediaUrl } from '../utils/mediaUrl.js'
+import { buildBlogPostJsonLd, buildOrganizationJsonLd } from '../seo/jsonLd.js'
+import { SITE_NAME } from '../seo/siteConfig.js'
 
 export function BlogPost() {
   const { slug } = useParams()
+  const { pathname } = useLocation()
   const { locale } = useLanguage()
   const copy = getBlogPostContent(locale)
   const { blogs: cardCopy } = getHomeContent(locale)
@@ -51,8 +57,55 @@ export function BlogPost() {
   const labels = blog ? getBlogLabels(locale, blog) : null
   const createdAt = blog ? formatBlogDate(String(blog.createdAt ?? ''), locale) : ''
 
+  const seo = useMemo(() => {
+    if (!blog || !labels || !slug) return null
+    const plain = labels.excerpt || labels.title
+    return {
+      title: `${labels.title} | ${SITE_NAME}`,
+      description: plain.slice(0, 160),
+      path: pathname,
+      ogImage:
+        typeof blog.featuredImageUrl === 'string'
+          ? optimizeMediaUrl(blog.featuredImageUrl, { width: 1200 }) || undefined
+          : undefined,
+      jsonLd: [
+        buildOrganizationJsonLd(null),
+        buildBlogPostJsonLd({
+          title: labels.title,
+          description: plain.slice(0, 300),
+          slug,
+          imageUrl:
+            typeof blog.featuredImageUrl === 'string'
+              ? optimizeMediaUrl(blog.featuredImageUrl, { width: 1200 })
+              : null,
+          createdAt: String(blog.createdAt ?? ''),
+          updatedAt: String(blog.updatedAt ?? blog.createdAt ?? ''),
+        }),
+      ],
+    }
+  }, [blog, labels, slug, pathname])
+
   return (
     <>
+      {seo ? (
+        <SeoHead
+          title={seo.title}
+          description={seo.description}
+          path={seo.path}
+          locale={locale}
+          ogImage={seo.ogImage}
+          jsonLd={seo.jsonLd}
+        />
+      ) : error && !loading ? (
+        <SeoHead
+          title={`Not Found | ${SITE_NAME}`}
+          description="The requested blog post could not be found."
+          path={pathname}
+          locale={locale}
+          noindex
+          jsonLd={[]}
+        />
+      ) : null}
       <Header />
       <main
         className="section-solid site-container md:px-25 min-h-[50vh] py-10 sm:py-12 lg:py-14"
@@ -66,12 +119,12 @@ export function BlogPost() {
           !loading ? (
             <div>
               <p className="font-body text-foreground/70">{copy.notFound}</p>
-              <Link
+              <LocalizedLink
                 to="/blogs"
                 className="mt-4 inline-block font-body text-primary hover:underline dark:text-secondary"
               >
                 {copy.backToBlog}
-              </Link>
+              </LocalizedLink>
             </div>
           ) : null
         ) : null}

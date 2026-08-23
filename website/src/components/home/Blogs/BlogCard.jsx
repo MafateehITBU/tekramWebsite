@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react'
-import { Link } from 'react-router-dom'
+import { LocalizedLink } from '../../common/LocalizedLink.jsx'
+import { optimizeMediaUrl } from '../../../utils/mediaUrl.js'
 import { formatBlogDate, getBlogLabels } from './blogLocale.js'
 
 /**
@@ -13,7 +14,7 @@ import { formatBlogDate, getBlogLabels } from './blogLocale.js'
 export function BlogCard({ blog, locale, readMoreLabel, minReadLabel }) {
   const { title, excerpt, categoryName, readTime } = getBlogLabels(locale, blog)
   const slug = String(blog.slug ?? '')
-  const imageUrl = blog.featuredImageUrl
+  const imageUrl = optimizeMediaUrl(blog.featuredImageUrl, { width: 1200 })
   const createdAt = formatBlogDate(String(blog.createdAt ?? ''), locale)
   const isRtl = locale === 'ar'
 
@@ -62,7 +63,7 @@ export function BlogCard({ blog, locale, readMoreLabel, minReadLabel }) {
         <div className="mt-3 h-px w-full bg-line" aria-hidden />
 
         <div className="mt-3 flex items-center justify-between gap-3">
-          <Link
+          <LocalizedLink
             to={`/blogs/${slug}`}
             className="inline-flex items-center gap-1.5 font-body text-sm font-medium text-primary transition-[gap] duration-300 ease-out group-hover:gap-3 dark:text-white"
           >
@@ -72,7 +73,7 @@ export function BlogCard({ blog, locale, readMoreLabel, minReadLabel }) {
               className="h-4 w-4 shrink-0"
               aria-hidden
             />
-          </Link>
+          </LocalizedLink>
           {readTime > 0 ? (
             <span className="shrink-0 font-body text-xs text-[#9ca3af] dark:text-gray-400 sm:text-sm">
               {minReadLabel(readTime)}
