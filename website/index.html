@@ -73,7 +73,15 @@
         border:0;border-radius:.5rem;background:#00502e;color:#fff;
         font:600 .875rem/1 system-ui,sans-serif;padding:.65rem 1.25rem;cursor:pointer;
       }
+      .home-react-hero{display:block}
+      .home-mobile-gap{display:none}
+      @media (max-width:767px){
+        .home-react-hero{display:none!important}
+        .home-mobile-gap{display:block;min-height:calc(100dvh - 3.5rem)}
+      }
       @media (min-width:768px){#boot-shell,#boot-cookie{display:none!important}}
+      html.is-desktop #boot-shell,
+      html.is-desktop #boot-cookie{display:none!important}
       html:not([data-home]) #boot-shell,
       html:not([data-home]) #boot-cookie{display:none!important}
     </style>
@@ -96,6 +104,9 @@
         }
         if (path === '/' || path === '/ar') {
           document.documentElement.setAttribute('data-home', '')
+        }
+        if (window.innerWidth >= 768) {
+          document.documentElement.classList.add('is-desktop')
         }
         if (localStorage.getItem('tikram-arabia-theme') === 'dark') {
           document.documentElement.classList.add('dark')

@@ -9,7 +9,7 @@ alwaysApply: true
 - Marketing site is **React.js (Vite SPA)** on the existing **PERN** stack (PostgreSQL, Express, React, Node).
 - **SSR / Next.js / prerender / separate mobile stack are REJECTED.** Do not migrate the framework.
 - Route-level lazy loading crashed production when a chunk had an **undefined default export** (React #306). Use `lazyNamed()` in `website/src/utils/lazyNamed.js` only — it requires a real named function export. Do **not** add Vite `manualChunks`.
-- Mobile homepage hero stays in HTML `#boot-shell` (do not tear it down). React Header + below-fold sections mount immediately; React `HeroSection` is desktop-only. Cookie bar is in the first HTML on phones. Do **not** delay content with timers.
+- Mobile homepage hero stays in HTML `#boot-shell`. Desktop never shows that shell (`is-desktop` + min-width 768). React `HeroSection` is hidden on phones with an inline CSS class, not a JS viewport hook. Do not load the main CSS asynchronously (desktop CLS). Do **not** delay content with timers.
 - Below-fold Home sections, other pages, Footer, CTA, cookie banner, and AOS are named-export chunks that load immediately via Suspense. Particles stay off below 768px. App CSS is async.
 
 ## Domains & deploy

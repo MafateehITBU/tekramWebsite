@@ -4,7 +4,6 @@ import { Header } from '../components/layout/Header.jsx'
 import { HeroSection } from '../components/home/Hero/HeroSection.jsx'
 import { HeroSocialLinks } from '../components/home/Hero/HeroSocialLinks.jsx'
 import { lazyNamed } from '../utils/lazyNamed.js'
-import { useIsNarrow } from '../hooks/useIsNarrow.js'
 
 const ServicesSection = lazyNamed(
   () => import('../components/home/Services/ServicesSection.jsx'),
@@ -39,49 +38,15 @@ const BlogsSection = lazyNamed(
   'BlogsSection',
 )
 
-function HomeBelowFold() {
-  return (
-    <Suspense fallback={null}>
-      <ServicesSection />
-      <CompanySection />
-      <PromoSection />
-      <ProcessSection />
-      <PartnersSection />
-      <PricingSection />
-      <TestimonialsSection />
-      <BlogsSection />
-    </Suspense>
-  )
-}
-
-function MobileHomeHero() {
-  const [socialSlot, setSocialSlot] = useState(/** @type {HTMLElement | null} */ (null))
-
-  useLayoutEffect(() => {
-    setSocialSlot(document.getElementById('boot-social'))
-  }, [])
-
-  return (
-    <>
-      <div className="min-h-[calc(100dvh-3.5rem)] w-full" aria-hidden />
-      {socialSlot
-        ? createPortal(
-            <div className="mt-6">
-              <HeroSocialLinks />
-            </div>,
-            socialSlot,
-          )
-        : null}
-    </>
-  )
-}
-
 export function Home() {
-  const isNarrow = useIsNarrow()
+  const [socialSlot, setSocialSlot] = useState(/** @type {HTMLElement | null} */ (null))
 
   useLayoutEffect(() => {
     document.documentElement.setAttribute('data-home', '')
     document.documentElement.classList.add('app-ready')
+    if (window.innerWidth < 768) {
+      setSocialSlot(document.getElementById('boot-social'))
+    }
     return () => {
       document.documentElement.removeAttribute('data-home')
       document.documentElement.classList.remove('app-ready')
@@ -91,14 +56,28 @@ export function Home() {
   return (
     <>
       <Header />
-      {isNarrow ? (
-        <MobileHomeHero />
-      ) : (
-        <main className="site-container text-white">
-          <HeroSection />
-        </main>
-      )}
-      <HomeBelowFold />
+      <main className="home-react-hero site-container text-white">
+        <HeroSection />
+      </main>
+      <div className="home-mobile-gap" aria-hidden />
+      {socialSlot
+        ? createPortal(
+            <div className="mt-6">
+              <HeroSocialLinks />
+            </div>,
+            socialSlot,
+          )
+        : null}
+      <Suspense fallback={null}>
+        <ServicesSection />
+        <CompanySection />
+        <PromoSection />
+        <ProcessSection />
+        <PartnersSection />
+        <PricingSection />
+        <TestimonialsSection />
+        <BlogsSection />
+      </Suspense>
     </>
   )
 }
