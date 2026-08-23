@@ -2,7 +2,7 @@ import { Suspense, useEffect } from 'react'
 import { Header } from '../components/layout/Header.jsx'
 import { HeroSection } from '../components/home/Hero/HeroSection.jsx'
 import { lazyNamed } from '../utils/lazyNamed.js'
-import { useAfterFirstPaint } from '../utils/useAfterFirstPaint.js'
+import { isNarrowViewport, useAfterFirstPaint } from '../utils/useAfterFirstPaint.js'
 
 const ServicesSection = lazyNamed(
   () => import('../components/home/Services/ServicesSection.jsx'),
@@ -38,7 +38,7 @@ const BlogsSection = lazyNamed(
 )
 
 export function Home() {
-  const showRest = useAfterFirstPaint()
+  const showRest = useAfterFirstPaint(isNarrowViewport() ? 6000 : 600)
 
   useEffect(() => {
     document.documentElement.setAttribute('data-home', '')

@@ -1,18 +1,21 @@
 import { useEffect, useState } from 'react'
 
-/** True after the browser is idle so below-fold work does not fight LCP. */
-export function useAfterFirstPaint(timeoutMs = 2200) {
-  const [ready, setReady] = useState(false)
+/**
+ * True after a minimum delay. Do not use requestIdleCallback here — it can
+ * fire immediately and let late UI steal mobile LCP.
+ */
+export function useAfterFirstPaint(minMs = 4000) {
+  const [ready, setReady] = useState(minMs <= 0)
 
   useEffect(() => {
-    const start = () => setReady(true)
-    if (typeof window.requestIdleCallback === 'function') {
-      const idle = window.requestIdleCallback(start, { timeout: timeoutMs })
-      return () => window.cancelIdleCallback(idle)
-    }
-    const timer = window.setTimeout(start, 350)
+    if (minMs <= 0) return undefined
+    const timer = window.setTimeout(() => setReady(true), minMs)
     return () => window.clearTimeout(timer)
-  }, [timeoutMs])
+  }, [minMs])
 
   return ready
+}
+
+export function isNarrowViewport() {
+  return typeof window !== 'undefined' && window.innerWidth < 768
 }

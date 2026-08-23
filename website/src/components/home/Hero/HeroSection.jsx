@@ -3,11 +3,13 @@ import { getHomeContent } from '../../../content/index.js'
 import { LocalizedLink } from '../../common/LocalizedLink.jsx'
 import { HeroSocialLinks } from './HeroSocialLinks.jsx'
 import { TypewriterSubtitle } from './TypewriterSubtitle.jsx'
+import { isNarrowViewport, useAfterFirstPaint } from '../../../utils/useAfterFirstPaint.js'
 
 export function HeroSection() {
   const { locale } = useLanguage()
   const copy = getHomeContent(locale).hero
   const isRtl = locale === 'ar'
+  const showExtras = useAfterFirstPaint(isNarrowViewport() ? 6000 : 0)
 
   const containerClass = isRtl
     ? 'flex w-full max-w-xl flex-col gap-6 md:mr-auto md:gap-8 items-stretch text-right'
@@ -29,35 +31,39 @@ export function HeroSection() {
           {copy.title}
         </h1>
 
-        <TypewriterSubtitle className="w-full" />
+        {showExtras ? <TypewriterSubtitle className="w-full" /> : null}
 
-        <p className="w-full font-body text-base font-normal leading-relaxed text-white sm:text-[1.0625rem] md:text-[1.125rem] lg:text-lg">
-          {copy.subtitle}
-        </p>
-        <HeroSocialLinks />
+        {showExtras ? (
+          <p className="w-full font-body text-base font-normal leading-relaxed text-white sm:text-[1.0625rem] md:text-[1.125rem] lg:text-lg">
+            {copy.subtitle}
+          </p>
+        ) : null}
+        {showExtras ? <HeroSocialLinks /> : null}
 
-        <div
-          dir={isRtl ? 'rtl' : 'ltr'}
-          className={[
-            'flex w-full flex-col gap-3',
-            isRtl
-              ? 'items-stretch md:flex-row md:justify-start md:gap-5'
-              : 'max-w-md items-stretch md:max-w-none md:flex-row md:justify-start md:gap-5',
-          ].join(' ')}
-        >
-          <LocalizedLink
-            to="/contact"
-            className="inline-flex w-full items-center justify-center rounded-lg border-2 border-white bg-secondary px-6 py-3 font-body text-base font-semibold text-white transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white md:w-auto md:min-w-[10.5rem]"
+        {showExtras ? (
+          <div
+            dir={isRtl ? 'rtl' : 'ltr'}
+            className={[
+              'flex w-full flex-col gap-3',
+              isRtl
+                ? 'items-stretch md:flex-row md:justify-start md:gap-5'
+                : 'max-w-md items-stretch md:max-w-none md:flex-row md:justify-start md:gap-5',
+            ].join(' ')}
           >
-            {copy.getQuotes}
-          </LocalizedLink>
-          <LocalizedLink
-            to="/contact"
-            className="inline-flex w-full items-center justify-center rounded-lg border-2 border-white bg-primary px-6 py-3 font-body text-base font-semibold text-white transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white dark:bg-background dark:hover:bg-background/90 md:w-auto md:min-w-[10.5rem]"
-          >
-            {copy.getStarted}
-          </LocalizedLink>
-        </div>
+            <LocalizedLink
+              to="/contact"
+              className="inline-flex w-full items-center justify-center rounded-lg border-2 border-white bg-secondary px-6 py-3 font-body text-base font-semibold text-white transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white md:w-auto md:min-w-[10.5rem]"
+            >
+              {copy.getQuotes}
+            </LocalizedLink>
+            <LocalizedLink
+              to="/contact"
+              className="inline-flex w-full items-center justify-center rounded-lg border-2 border-white bg-primary px-6 py-3 font-body text-base font-semibold text-white transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white dark:bg-background dark:hover:bg-background/90 md:w-auto md:min-w-[10.5rem]"
+            >
+              {copy.getStarted}
+            </LocalizedLink>
+          </div>
+        ) : null}
       </div>
     </section>
   )

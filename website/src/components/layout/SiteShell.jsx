@@ -5,7 +5,7 @@ import { SeoManager } from '../../seo/SeoManager.jsx'
 import { SiteBackground } from './SiteBackground.jsx'
 import { stripLocalePrefix } from '../../utils/localePaths.js'
 import { lazyNamed } from '../../utils/lazyNamed.js'
-import { useAfterFirstPaint } from '../../utils/useAfterFirstPaint.js'
+import { isNarrowViewport, useAfterFirstPaint } from '../../utils/useAfterFirstPaint.js'
 
 const CtaSection = lazyNamed(() => import('./CtaSection.jsx'), 'CtaSection')
 const Footer = lazyNamed(() => import('./Footer.jsx'), 'Footer')
@@ -58,7 +58,8 @@ export function SiteShell({ children }) {
   const { pathname } = useLocation()
   const showCta = shouldShowCta(pathname)
   const isHome = stripLocalePrefix(pathname) === '/'
-  const showChrome = useAfterFirstPaint() || !isHome
+  const showChrome =
+    useAfterFirstPaint(isHome && isNarrowViewport() ? 8000 : 600) || !isHome
 
   return (
     <div className="relative isolate flex min-h-0 w-full flex-1 flex-col">

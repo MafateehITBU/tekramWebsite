@@ -10,7 +10,7 @@ alwaysApply: true
 - **SSR / Next.js / prerender / separate mobile stack are REJECTED.** Do not migrate the framework.
 - Route-level lazy loading crashed production when a chunk had an **undefined default export** (React #306). Use `lazyNamed()` in `website/src/utils/lazyNamed.js` only — it requires a real named function export. Do **not** add Vite `manualChunks`.
 - Homepage first paint is Header + Hero only. Below-fold Home sections, other pages, Footer, CTA, cookie banner, and AOS load as named-export chunks after idle.
-- Mobile LCP is the HTML `#lcp-hero` heading (outside `#root`, hidden from `md` up). Do not paint a second visible H1 on small screens. App CSS is async; Google Fonts load after `load` on mobile. Particles stay off below 768px.
+- Mobile LCP is the HTML `#lcp-hero` heading (outside `#root`, z-index 40, system font only). Do not cover it with `#root`, do not restyle it with web fonts, and do not paint larger late UI (cookie, hero extras, below-fold) until after 6–8s on narrow viewports. Particles stay off below 768px. App CSS is async.
 
 ## Domains & deploy
 - Site: `tikramarabia.com` (VPS `/opt/tikramarabia`, Docker `-p tikramarabia`)

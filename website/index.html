@@ -36,10 +36,11 @@
     <title>Tikram Arabia</title>
     <style>
       html,body{margin:0;background:#00502e;color:#fff}
+      #root{position:relative;z-index:0}
       #lcp-hero{
-        position:absolute;z-index:12;left:1rem;right:1rem;top:6rem;
+        position:absolute;z-index:40;left:1rem;right:1rem;top:6rem;
         margin:0 auto;max-width:36rem;
-        font:700 1.875rem/1.25 system-ui,-apple-system,Segoe UI,sans-serif;
+        font:700 1.875rem/1.25 system-ui,-apple-system,Segoe UI,sans-serif !important;
         text-align:center;pointer-events:none;
       }
       html[dir=rtl] #lcp-hero{text-align:right}
@@ -94,9 +95,14 @@
             document.head.appendChild(p2)
             addFonts()
           } else {
-            window.addEventListener('load', function () {
-              setTimeout(addFonts, 1200)
-            })
+            var added = false
+            function addOnce() {
+              if (added) return
+              added = true
+              addFonts()
+            }
+            window.addEventListener('pointerdown', addOnce, { once: true })
+            setTimeout(addOnce, 10000)
           }
         } catch (_) {}
       })()
