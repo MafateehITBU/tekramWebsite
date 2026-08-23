@@ -1,11 +1,14 @@
+import { Suspense } from 'react'
 import { useLocation } from 'react-router-dom'
-import { CtaSection } from './CtaSection.jsx'
-import { Footer } from './Footer.jsx'
 import { Analytics } from './Analytics.jsx'
-import { CookieConsent } from './CookieConsent.jsx'
 import { SeoManager } from '../../seo/SeoManager.jsx'
 import { SiteBackground } from './SiteBackground.jsx'
 import { stripLocalePrefix } from '../../utils/localePaths.js'
+import { lazyNamed } from '../../utils/lazyNamed.js'
+
+const CtaSection = lazyNamed(() => import('./CtaSection.jsx'), 'CtaSection')
+const Footer = lazyNamed(() => import('./Footer.jsx'), 'Footer')
+const CookieConsent = lazyNamed(() => import('./CookieConsent.jsx'), 'CookieConsent')
 
 /**
  * App shell: background decor, page content, optional CTA, footer.
@@ -61,9 +64,11 @@ export function SiteShell({ children }) {
         <SeoManager />
         <Analytics />
         {children}
-        {showCta ? <CtaSection /> : null}
-        <Footer />
-        <CookieConsent />
+        <Suspense fallback={null}>
+          {showCta ? <CtaSection /> : null}
+          <Footer />
+          <CookieConsent />
+        </Suspense>
       </div>
     </div>
   )

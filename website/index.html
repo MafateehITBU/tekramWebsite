@@ -63,6 +63,8 @@
         if (path === '/ar' || path.indexOf('/ar/') === 0) {
           document.documentElement.lang = 'ar'
           document.documentElement.dir = 'rtl'
+          var lcp = document.getElementById('lcp-title')
+          if (lcp) lcp.textContent = 'وسط فوضى الاحتمالات… اختر النتائج المضمونة'
         }
         if (localStorage.getItem('tikram-arabia-theme') === 'dark') {
           document.documentElement.classList.add('dark')
@@ -82,9 +84,9 @@
     </noscript>
     <div id="root">
       <div style="min-height:100dvh;background:#00502e;color:#fff;padding:5.5rem 1.25rem 2rem;font-family:Montserrat,Roboto,sans-serif">
-        <p style="margin:0;max-width:36rem;font-size:clamp(1.5rem,4vw,2.75rem);font-weight:700;line-height:1.15">
-          Tikram Arabia
-        </p>
+        <h1 id="lcp-title" style="margin:0;max-width:36rem;font-size:clamp(1.5rem,4vw,2.75rem);font-weight:700;line-height:1.15">
+          In a World Full of Uncertainty…Choose Proven Results
+        </h1>
       </div>
     </div>
     <script type="module" src="/src/main.jsx"></script>

@@ -8,7 +8,7 @@ const VERTICAL_OFFSET =
 export function DecorHand({ isRtl }) {
   return (
     <div
-      className={`pointer-events-none fixed inset-y-0 z-[3] flex items-center ${
+      className={`pointer-events-none fixed inset-y-0 z-[3] hidden items-center md:flex ${
         isRtl ? 'right-0 justify-end' : 'left-0 justify-start'
       }`}
       aria-hidden

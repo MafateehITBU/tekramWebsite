@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Link } from 'react-router-dom'
-import logo from '../../assets/imgs/logo-02.png'
 import logoWhite from '../../assets/imgs/logo-white.png'
 import { NAV_ITEMS } from '../../constants/navigation.js'
 import { useLanguage } from '../../context/useLanguage.js'
@@ -10,6 +9,7 @@ import { isNavActive, usePathname } from '../../utils/pathname.js'
 import { LanguageFlag } from '../LanguageFlag.jsx'
 import { ThemeToggle } from '../ThemeToggle.jsx'
 
+const LOGO_COLOR = '/logo-02.webp'
 const MOBILE_MENU_BG = '#131313'
 
 // --- Icons (burger open / close) ---
@@ -276,7 +276,7 @@ export function Header() {
                 onClick={closeMenu}
               >
                 <img
-                  src={logo}
+                  src={LOGO_COLOR}
                   alt=""
                   className="h-10 w-auto max-w-[8rem] object-contain sm:h-11 sm:max-w-[9rem] md:h-15 md:max-w-[12rem] md:mr-8 dark:hidden"
                   width={160}
