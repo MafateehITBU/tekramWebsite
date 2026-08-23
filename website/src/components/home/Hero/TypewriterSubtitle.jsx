@@ -66,7 +66,7 @@ export function TypewriterSubtitle({ className = '' }) {
   const animatedText = useTypewriter(copy.animated, motionEnabled)
 
   return (
-    <h4
+    <h2
       className={`block font-body text-lg font-medium leading-snug text-secondary sm:text-xl md:text-2xl ${className}`.trim()}
     >
       <span className="text-secondary">{copy.prefix}</span>
@@ -76,6 +76,6 @@ export function TypewriterSubtitle({ className = '' }) {
         style={{ height: '0.85em' }}
         aria-hidden
       />
-    </h4>
+    </h2>
   )
 }

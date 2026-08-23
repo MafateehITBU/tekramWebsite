@@ -68,6 +68,7 @@ export function BlogCard({ blog, locale, readMoreLabel, minReadLabel }) {
             className="inline-flex items-center gap-1.5 font-body text-sm font-medium text-primary transition-[gap] duration-300 ease-out group-hover:gap-3 dark:text-white"
           >
             {readMoreLabel}
+            {title ? <span className="sr-only">: {title}</span> : null}
             <Icon
               icon={isRtl ? 'solar:arrow-left-linear' : 'solar:arrow-right-linear'}
               className="h-4 w-4 shrink-0"

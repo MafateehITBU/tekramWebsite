@@ -4,3 +4,6 @@ node_modules/
 dist/
 .DS_Store
 *.log
+TIKRAM_7_KEY_DELIVERABLES_OPERATIONAL.xlsx
+__pycache__/
+*.pyc

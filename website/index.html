@@ -33,6 +33,7 @@
       content="IT solutions, digital marketing, and branding in Saudi Arabia."
     />
     <meta name="twitter:image" content="https://tikramarabia.com/logo-02.png" />
+    <link rel="preload" as="image" href="/hand-sm.webp" imagesrcset="/hand-sm.webp 720w, /hand.webp 1600w" imagesizes="(max-width: 768px) 78vw, min(58vw, 52rem)" fetchpriority="high" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -80,7 +81,13 @@
         </p>
       </div>
     </noscript>
-    <div id="root"></div>
+    <div id="root">
+      <div style="min-height:100dvh;background:#00502e;color:#fff;padding:5.5rem 1.25rem 2rem;font-family:Montserrat,Roboto,sans-serif">
+        <p style="margin:0;max-width:36rem;font-size:clamp(1.5rem,4vw,2.75rem);font-weight:700;line-height:1.15">
+          Tikram Arabia
+        </p>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

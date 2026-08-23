@@ -5,7 +5,7 @@ export function TestimonialStars({ rate }) {
   const filled = Math.min(5, Math.max(0, Math.round(rate)))
 
   return (
-    <div className="flex gap-0.5" aria-label={`${filled} out of 5`}>
+    <div className="flex gap-0.5" role="img" aria-label={`${filled} out of 5`}>
       {Array.from({ length: 5 }, (_, index) => (
         <Icon
           key={index}
