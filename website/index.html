@@ -36,7 +36,7 @@
     <title>Tikram Arabia</title>
     <style>
       html,body{margin:0;background:#00502e;color:#fff}
-      #boot-shell{min-height:100dvh;background:#00502e}
+      #boot-shell{position:absolute;z-index:8;top:0;left:0;right:0;pointer-events:none}
       .boot-header{
         display:flex;align-items:center;height:3.5rem;padding:0 1rem;
         background:#fefefe;border-bottom:1px solid #e0e0e0;
@@ -46,9 +46,12 @@
       .boot-hero{
         box-sizing:border-box;padding:2.5rem 1rem 2rem;max-width:36rem;margin:0 auto;
         text-align:center;font-family:system-ui,-apple-system,Segoe UI,sans-serif;
+        pointer-events:auto;
       }
+      html.app-ready .boot-header{display:none}
+      html.app-ready #boot-shell{top:3.5rem}
       html[dir=rtl] .boot-hero{text-align:right}
-      .boot-hero h1{margin:0;font:700 1.875rem/1.25 system-ui,-apple-system,Segoe UI,sans-serif}
+      .boot-hero h1{margin:0;font:700 1.875rem/1.25 system-ui,-apple-system,Segoe UI,sans-serif!important}
       .boot-line{margin:1.5rem 0 0;color:#dfb026;font:500 1.125rem/1.35 system-ui,sans-serif}
       .boot-sub{margin:1.5rem 0 0;font:400 1rem/1.6 system-ui,sans-serif}
       .boot-cta{margin-top:1.5rem;display:flex;flex-direction:column;gap:.75rem}
@@ -59,9 +62,20 @@
       }
       .boot-quote{background:#dfb026}
       .boot-start{background:#00502e}
-      @media (min-width:768px){#boot-shell{display:none!important}}
+      #boot-cookie{
+        position:fixed;z-index:90;left:0;right:0;bottom:0;
+        background:#fefefe;color:#0d0d0d;border-top:1px solid #e0e0e0;
+        padding:1rem;font:400 .875rem/1.5 system-ui,sans-serif;pointer-events:auto;
+      }
+      html.dark #boot-cookie{background:#131313;color:#fefefe;border-color:#222}
+      #boot-cookie .boot-cookie-row{display:flex;flex-direction:column;gap:.75rem;max-width:1440px;margin:0 auto}
+      #boot-cookie-accept{
+        border:0;border-radius:.5rem;background:#00502e;color:#fff;
+        font:600 .875rem/1 system-ui,sans-serif;padding:.65rem 1.25rem;cursor:pointer;
+      }
+      @media (min-width:768px){#boot-shell,#boot-cookie{display:none!important}}
       html:not([data-home]) #boot-shell,
-      html.app-ready #boot-shell{display:none!important}
+      html:not([data-home]) #boot-cookie{display:none!important}
     </style>
     <script type="application/ld+json">
       {
@@ -134,10 +148,20 @@
         <p class="boot-sub" id="boot-sub">
           At Tikram Arabia, we combine marketing, technology, and systems to create integrated experiences that strengthen your business and deliver measurable results.
         </p>
+        <div id="boot-social"></div>
         <div class="boot-cta">
           <a class="boot-quote" id="boot-quote" href="/contact">Get a Quote</a>
           <a class="boot-start" id="boot-start" href="/contact">Start With Us</a>
         </div>
+      </div>
+    </div>
+    <div id="boot-cookie">
+      <div class="boot-cookie-row">
+        <p id="boot-cookie-msg" style="margin:0">
+          We use essential cookies and optional analytics to improve your experience.
+          <a href="/privacy-policy" style="font-weight:600;color:#00502e">Privacy Policy</a>
+        </p>
+        <button type="button" id="boot-cookie-accept">Accept</button>
       </div>
     </div>
     <div id="root"></div>
@@ -154,6 +178,26 @@
           if (sub) sub.textContent = 'في تكرم، نجمع بين التسويق، التقنية، والأنظمة لنصنع تجربة متكاملة تمنح مشروعك حضورًا أقوى، أداءً أفضل، ونتائج يمكن قياسها.'
           if (q) { q.textContent = 'اطلب عرض سعر'; q.href = '/ar/contact' }
           if (s) { s.textContent = 'ابدأ معنا'; s.href = '/ar/contact' }
+          var cm = document.getElementById('boot-cookie-msg')
+          var ca = document.getElementById('boot-cookie-accept')
+          if (cm) cm.innerHTML = 'نستخدم cookies أساسية وتحليلات اختيارية لتحسين تجربتك. <a href="/ar/privacy-policy" style="font-weight:600;color:#00502e">سياسة الخصوصية</a>'
+          if (ca) ca.textContent = 'موافق'
+        }
+      } catch (_) {}
+    </script>
+    <script>
+      try {
+        var bar = document.getElementById('boot-cookie')
+        if (bar && localStorage.getItem('tikram-arabia-cookie-consent') === 'accepted') {
+          bar.hidden = true
+        }
+        var accept = document.getElementById('boot-cookie-accept')
+        if (accept) {
+          accept.addEventListener('click', function () {
+            localStorage.setItem('tikram-arabia-cookie-consent', 'accepted')
+            if (bar) bar.hidden = true
+            window.dispatchEvent(new Event('tikram-analytics-consent'))
+          })
         }
       } catch (_) {}
     </script>

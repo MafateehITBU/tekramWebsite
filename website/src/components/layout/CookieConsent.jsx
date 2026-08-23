@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 import { LocalizedLink } from '../common/LocalizedLink.jsx'
 import { useLanguage } from '../../context/useLanguage.js'
 import { dispatchAnalyticsConsent, COOKIE_CONSENT_KEY } from '../../utils/analyticsConsent.js'
@@ -23,7 +23,14 @@ export function CookieConsent() {
   const copy = COPY[locale]
   const [visible, setVisible] = useState(false)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    const boot = document.getElementById('boot-cookie')
+    const bootHandlesMobileHome =
+      Boolean(boot) &&
+      !boot.hidden &&
+      window.innerWidth < 768 &&
+      document.documentElement.hasAttribute('data-home')
+    if (bootHandlesMobileHome) return
     try {
       if (localStorage.getItem(COOKIE_CONSENT_KEY) !== 'accepted') setVisible(true)
     } catch {
