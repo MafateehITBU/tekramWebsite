@@ -1,11 +1,18 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, type ClipboardEvent } from "react";
 import {
   BoldOutlined,
   ItalicOutlined,
   LineOutlined,
+  LinkOutlined,
   UnderlineOutlined,
 } from "@ant-design/icons";
-import { Button, Divider, Space, Tooltip, Typography } from "antd";
+import { Button, Divider, Input, Modal, Space, Tooltip, Typography, message } from "antd";
+import {
+  autoLinkPlainText,
+  escapeHtml,
+  looksLikeBareUrl,
+  sanitizeHref,
+} from "../lib/htmlContent";
 
 export const RICH_COLOR_PRIMARY = "#00502e";
 export const RICH_COLOR_SECONDARY = "#dfb026";
@@ -48,6 +55,36 @@ function stripTags(html: string): string {
 
 const ALLOWED_COLOR_CLASSES = new Set(["text-primary", "text-secondary"]);
 
+function stampSafeAnchors(root: HTMLElement) {
+  root.querySelectorAll("a").forEach((anchor) => {
+    const safe = sanitizeHref(anchor.getAttribute("href") || "");
+    if (!safe) {
+      const parent = anchor.parentNode;
+      if (!parent) {
+        anchor.remove();
+        return;
+      }
+      while (anchor.firstChild) {
+        parent.insertBefore(anchor.firstChild, anchor);
+      }
+      anchor.remove();
+      return;
+    }
+    anchor.setAttribute("href", safe);
+    anchor.setAttribute("target", "_blank");
+    anchor.setAttribute("rel", "noopener noreferrer");
+  });
+}
+
+function findAnchor(node: Node | null, stop: HTMLElement | null): HTMLAnchorElement | null {
+  let current: Node | null = node;
+  while (current && current !== stop) {
+    if (current instanceof HTMLAnchorElement) return current;
+    current = current.parentNode;
+  }
+  return null;
+}
+
 /** Unwrap browser-generated spans (styles) that are not brand color spans. */
 function normalizeEditorHtml(html: string): string {
   if (!html?.trim()) return html;
@@ -74,6 +111,7 @@ function normalizeEditorHtml(html: string): string {
     font.remove();
   });
 
+  stampSafeAnchors(body);
   return body.innerHTML;
 }
 
@@ -87,6 +125,9 @@ export function RichHtmlEditor({
 }: RichHtmlEditorProps) {
   const editorRef = useRef<HTMLDivElement>(null);
   const lastEmitted = useRef<string | undefined>(undefined);
+  const savedRange = useRef<Range | null>(null);
+  const [linkOpen, setLinkOpen] = useState(false);
+  const [linkUrl, setLinkUrl] = useState("");
 
   useEffect(() => {
     const el = editorRef.current;
@@ -99,13 +140,34 @@ export function RichHtmlEditor({
   }, [value]);
 
   const emitChange = () => {
-    const raw = editorRef.current?.innerHTML ?? "";
+    const el = editorRef.current;
+    if (!el) return;
+    stampSafeAnchors(el);
+    const raw = el.innerHTML ?? "";
     const html = extended ? normalizeEditorHtml(raw) : raw;
-    if (extended && html !== raw && editorRef.current) {
-      editorRef.current.innerHTML = html;
+    if (extended && html !== raw) {
+      el.innerHTML = html;
     }
     lastEmitted.current = html;
     onChange?.(html);
+  };
+
+  const rememberSelection = () => {
+    const sel = window.getSelection();
+    if (sel && sel.rangeCount > 0) {
+      savedRange.current = sel.getRangeAt(0).cloneRange();
+    }
+  };
+
+  const restoreSelection = () => {
+    const el = editorRef.current;
+    const range = savedRange.current;
+    if (!el || !range) return;
+    el.focus();
+    const sel = window.getSelection();
+    if (!sel) return;
+    sel.removeAllRanges();
+    sel.addRange(range);
   };
 
   const applyFormat = (command: "bold" | "italic" | "underline") => {
@@ -163,10 +225,78 @@ export function RichHtmlEditor({
     emitChange();
   };
 
+  const openLinkModal = () => {
+    const el = editorRef.current;
+    el?.focus();
+    rememberSelection();
+    const sel = window.getSelection();
+    const existing = findAnchor(sel?.anchorNode ?? null, el);
+    const selected = sel?.toString() ?? "";
+    setLinkUrl(existing?.getAttribute("href") || (looksLikeBareUrl(selected) ? selected.trim() : ""));
+    setLinkOpen(true);
+  };
+
+  const applyLink = () => {
+    const safe = sanitizeHref(linkUrl);
+    if (!safe) {
+      message.error("Enter a valid http(s), mailto, or site path URL.");
+      return;
+    }
+    restoreSelection();
+    const el = editorRef.current;
+    const sel = window.getSelection();
+    const existing = findAnchor(sel?.anchorNode ?? null, el);
+    if (existing) {
+      existing.setAttribute("href", safe);
+      existing.setAttribute("target", "_blank");
+      existing.setAttribute("rel", "noopener noreferrer");
+    } else if (sel && !sel.isCollapsed) {
+      document.execCommand("createLink", false, safe);
+    } else {
+      document.execCommand(
+        "insertHTML",
+        false,
+        `<a href="${escapeHtml(safe)}" target="_blank" rel="noopener noreferrer">${escapeHtml(safe)}</a>`
+      );
+    }
+    if (el) stampSafeAnchors(el);
+    emitChange();
+    setLinkOpen(false);
+    setLinkUrl("");
+  };
+
+  const handlePaste = (event: ClipboardEvent<HTMLDivElement>) => {
+    const text = event.clipboardData.getData("text/plain");
+    const trimmed = text.trim();
+    if (!trimmed) return;
+
+    if (looksLikeBareUrl(trimmed) && !trimmed.includes("\n")) {
+      event.preventDefault();
+      const href = sanitizeHref(trimmed);
+      if (!href) return;
+      const sel = window.getSelection();
+      const label = sel && !sel.isCollapsed ? sel.toString() : trimmed;
+      document.execCommand(
+        "insertHTML",
+        false,
+        `<a href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(label)}</a>`
+      );
+      emitChange();
+      return;
+    }
+
+    if (/\b(?:https?:\/\/|www\.)/i.test(text)) {
+      event.preventDefault();
+      document.execCommand("insertHTML", false, autoLinkPlainText(text));
+      emitChange();
+    }
+  };
+
   const isEmpty = !value || value === "<br>" || !stripTags(value).trim();
 
   return (
-    <div className="rich-html-editor">
+    <div>
+    <div className="rich-html-editor" style={{ minHeight: minHeight + 52 }}>
       <Space wrap className="rich-html-editor__toolbar" split={<Divider type="vertical" />}>
         <Space size={4} wrap>
           {HEADING_BUTTONS.map(({ tag, label }) => (
@@ -216,6 +346,15 @@ export function RichHtmlEditor({
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => applyFormat("underline")}
           />
+          <Tooltip title="Insert link">
+            <Button
+              type="text"
+              aria-label="Insert link"
+              icon={<LinkOutlined />}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={openLinkModal}
+            />
+          </Tooltip>
         </Space>
 
         {extended ? (
@@ -281,15 +420,34 @@ export function RichHtmlEditor({
         suppressContentEditableWarning
         onInput={emitChange}
         onBlur={emitChange}
+        onPaste={handlePaste}
       />
+    </div>
 
       {isEmpty ? (
         <Typography.Text type="secondary" style={{ display: "block", marginTop: 6, fontSize: 12 }}>
           {extended
-            ? "Headings, bold/italic/underline, brand colors, and horizontal lines are supported."
-            : "Use H1–H6 for headings, P for normal text, and the icons for bold, italic, and underline."}
+            ? "Headings, bold/italic/underline, links, brand colors, and horizontal lines are supported. Pasted URLs become links."
+            : "Use H1–H6 for headings, P for normal text, the icons for bold, italic, underline, and link. Pasted URLs become links."}
         </Typography.Text>
       ) : null}
+
+      <Modal
+        title="Insert link"
+        open={linkOpen}
+        onOk={applyLink}
+        onCancel={() => setLinkOpen(false)}
+        okText="Add link"
+        destroyOnClose
+      >
+        <Input
+          autoFocus
+          value={linkUrl}
+          placeholder="https://example.com"
+          onChange={(e) => setLinkUrl(e.target.value)}
+          onPressEnter={applyLink}
+        />
+      </Modal>
     </div>
   );
 }

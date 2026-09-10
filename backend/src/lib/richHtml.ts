@@ -13,6 +13,7 @@ const BASIC_TAGS = new Set([
   "h4",
   "h5",
   "h6",
+  "a",
 ]);
 
 const EXTENDED_TAGS = new Set([...BASIC_TAGS, "span", "hr", "font"]);
@@ -70,6 +71,42 @@ function sanitizeFontOpen(attrs: string): string {
   return `<span class="${colorClass}">`;
 }
 
+function sanitizeHref(raw: string): string | null {
+  let href = raw.trim().replace(/&amp;/gi, "&");
+  if (!href) return null;
+  if (/^(javascript|data|vbscript|file):/i.test(href)) return null;
+  if (href.startsWith("//")) href = `https:${href}`;
+  if (href.startsWith("/") && !href.startsWith("//")) {
+    if (/[\s<>"'`]/.test(href)) return null;
+    return href;
+  }
+  if (/^www\./i.test(href)) href = `https://${href}`;
+  if (
+    !/^[a-z][a-z0-9+.-]*:/i.test(href) &&
+    /^[a-z0-9][a-z0-9.-]*\.[a-z]{2,}([/:?#].*)?$/i.test(href)
+  ) {
+    href = `https://${href}`;
+  }
+  try {
+    const url = new URL(href);
+    if (url.protocol !== "http:" && url.protocol !== "https:" && url.protocol !== "mailto:") {
+      return null;
+    }
+    return href;
+  } catch {
+    return null;
+  }
+}
+
+function sanitizeAnchorOpen(attrs: string): string {
+  const hrefMatch = attrs.match(/\bhref=["']([^"']*)["']/i);
+  if (!hrefMatch) return "";
+  const href = sanitizeHref(hrefMatch[1]);
+  if (!href) return "";
+  const escaped = href.replace(/&/g, "&amp;").replace(/"/g, "&quot;");
+  return `<a href="${escaped}" target="_blank" rel="noopener noreferrer">`;
+}
+
 /** Drop </span> tags that do not match a kept color span open tag. */
 function balanceSpanTags(html: string): string {
   let depth = 0;
@@ -84,6 +121,24 @@ function balanceSpanTags(html: string): string {
     depth += 1;
     return match;
   });
+}
+
+function balanceAnchorTags(html: string): string {
+  let depth = 0;
+  return html.replace(
+    /<a href="[^"]*" target="_blank" rel="noopener noreferrer">|<\/a>/gi,
+    (match) => {
+      if (match.startsWith("</")) {
+        if (depth > 0) {
+          depth -= 1;
+          return "</a>";
+        }
+        return "";
+      }
+      depth += 1;
+      return match;
+    }
+  );
 }
 
 export function sanitizeRichHtml(input: string, options: SanitizeRichHtmlOptions = {}): string {
@@ -114,11 +169,18 @@ export function sanitizeRichHtml(input: string, options: SanitizeRichHtmlOptions
       return sanitizeFontOpen(attrs);
     }
 
+    if (tag === "a") {
+      if (isClose) return "</a>";
+      return sanitizeAnchorOpen(attrs);
+    }
+
     if (isClose) return `</${tag}>`;
     if (tag === "br") return "<br>";
     if (tag === "hr" && extended) return '<hr class="rich-divider">';
     return `<${tag}>`;
   });
+
+  out = balanceAnchorTags(out);
 
   if (extended) {
     out = balanceSpanTags(out);

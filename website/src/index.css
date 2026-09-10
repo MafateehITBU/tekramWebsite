@@ -939,6 +939,25 @@ html.dark {
     text-decoration: underline;
   }
 
+  .rich-html a {
+    color: var(--color-primary);
+    font-weight: 600;
+    text-decoration: underline;
+    word-break: break-word;
+  }
+
+  .rich-html a:hover {
+    color: var(--color-secondary);
+  }
+
+  html.dark .rich-html a {
+    color: var(--color-secondary);
+  }
+
+  html.dark .rich-html a:hover {
+    color: #fff;
+  }
+
   .rich-html p {
     margin: 0 0 1em;
   }

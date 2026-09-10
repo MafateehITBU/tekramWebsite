@@ -1271,18 +1271,34 @@ body {
   background: rgba(0, 80, 46, 0.06) !important;
 }
 
-.rich-html-editor__toolbar {
-  margin-bottom: 8px;
-  padding: 4px 6px;
+.rich-html-editor {
+  display: flex;
+  flex-direction: column;
+  max-height: min(70vh, 720px);
   border: 1px solid var(--admin-border);
   border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.rich-html-editor__toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  flex-shrink: 0;
+  margin-bottom: 0;
+  padding: 6px 8px;
+  border: none;
+  border-bottom: 1px solid var(--admin-border);
+  border-radius: 0;
   background: #fafafa;
 }
 
 .rich-html-editor__surface {
+  flex: 1 1 auto;
   padding: 12px 14px;
-  border: 1px solid var(--admin-border);
-  border-radius: 8px;
+  border: none;
+  border-radius: 0;
   background: #fff;
   line-height: 1.65;
   outline: none;
@@ -1370,4 +1386,10 @@ body {
   border: none;
   border-top: 1px solid #e0e0e0;
   margin: 1.25em 0;
+}
+
+.rich-html-editor__surface a {
+  color: #00502e;
+  font-weight: 600;
+  text-decoration: underline;
 }
