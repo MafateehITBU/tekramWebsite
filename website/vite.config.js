@@ -28,6 +28,7 @@ function mobileAsyncCss() {
 }
 
 export default defineConfig({
+  appType: 'spa',
   plugins: [react(), tailwindcss(), mobileAsyncCss()],
 })
 

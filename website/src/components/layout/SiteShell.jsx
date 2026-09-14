@@ -34,7 +34,7 @@ const STATIC_ROUTES = new Set([
 function isKnownRoute(pathname) {
   const path = stripLocalePrefix(pathname)
   if (STATIC_ROUTES.has(path)) return true
-  if (/^\/blogs\/[^/]+$/.test(path)) return true
+  if (/^\/blogs\//.test(path)) return true
   return false
 }
 

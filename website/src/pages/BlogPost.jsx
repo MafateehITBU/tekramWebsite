@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useLocation, useParams } from 'react-router-dom'
+import { Navigate, useLocation, useParams } from 'react-router-dom'
 import api from '../axiosConfig.js'
 import { BlogPostArticle } from '../components/blog/BlogPostArticle.jsx'
 import { BlogPostSidebar } from '../components/blog/BlogPostSidebar.jsx'
@@ -13,9 +13,11 @@ import { SeoHead } from '../seo/SeoHead.jsx'
 import { optimizeMediaUrl } from '../utils/mediaUrl.js'
 import { buildBlogPostJsonLd, buildOrganizationJsonLd } from '../seo/jsonLd.js'
 import { SITE_NAME } from '../seo/siteConfig.js'
+import { localizedPath, normalizeBlogLookupKey } from '../utils/localePaths.js'
 
 export function BlogPost() {
-  const { slug } = useParams()
+  const { slug: slugParam } = useParams()
+  const slug = normalizeBlogLookupKey(slugParam)
   const { pathname } = useLocation()
   const { locale } = useLanguage()
   const copy = getBlogPostContent(locale)
@@ -32,14 +34,14 @@ export function BlogPost() {
     setLoading(true)
     setError(null)
     api
-      .get(`/public/blogs/${slug}`)
+      .get(`/public/blogs/${encodeURIComponent(slug)}`)
       .then((res) => {
         if (!cancelled) {
           setBlog(res.data)
           const viewKey = `blog-view-recorded:${slug}`
           if (!sessionStorage.getItem(viewKey)) {
             sessionStorage.setItem(viewKey, '1')
-            void api.post(`/public/blogs/${slug}/view`).catch(() => {})
+            void api.post(`/public/blogs/${encodeURIComponent(slug)}/view`).catch(() => {})
           }
         }
       })
@@ -84,6 +86,10 @@ export function BlogPost() {
       ],
     }
   }, [blog, labels, slug, pathname])
+
+  if (blog && typeof blog.slug === 'string' && blog.slug && blog.slug !== slug) {
+    return <Navigate to={`${localizedPath('/blogs', locale)}/${blog.slug}`} replace />
+  }
 
   return (
     <>

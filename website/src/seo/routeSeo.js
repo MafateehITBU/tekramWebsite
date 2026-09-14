@@ -91,7 +91,7 @@ export const ROUTE_SEO = {
  */
 export function getRouteSeo(pathname) {
   if (ROUTE_SEO[pathname]) return ROUTE_SEO[pathname]
-  if (/^\/blogs\/[^/]+$/.test(pathname)) return null
+  if (/^\/blogs\//.test(pathname)) return null
   return {
     path: pathname,
     title: `Page Not Found | ${SITE_NAME}`,

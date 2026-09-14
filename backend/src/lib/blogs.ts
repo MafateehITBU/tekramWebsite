@@ -38,10 +38,36 @@ export async function getTopReadBlogs(limit = 3): Promise<TopReadBlog[]> {
   }));
 }
 
+function blogLookupKey(raw: string | undefined): string {
+  if (!raw) return "";
+  try {
+    return decodeURIComponent(raw).trim();
+  } catch {
+    return raw.trim();
+  }
+}
+
+const publishedBlogInclude = {
+  category: true,
+  tags: { include: { tag: true } },
+} as const;
+
+/** Published post by public slug or record id (shared dashboard / old links). */
+export async function findPublishedBlog(key: string) {
+  const k = blogLookupKey(key);
+  if (!k) return null;
+  return prisma.blog.findFirst({
+    where: { published: true, OR: [{ slug: k }, { id: k }] },
+    include: publishedBlogInclude,
+  });
+}
+
 /** Increment read count when a visitor opens a published blog post. */
 export async function recordBlogRead(slug: string): Promise<boolean> {
+  const k = blogLookupKey(slug);
+  if (!k) return false;
   const result = await prisma.blog.updateMany({
-    where: { slug, published: true },
+    where: { published: true, OR: [{ slug: k }, { id: k }] },
     data: { readCount: { increment: 1 } },
   });
   return result.count > 0;

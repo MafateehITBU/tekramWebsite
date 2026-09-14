@@ -4,7 +4,7 @@ import { z } from "zod";
 import { prisma } from "../lib/prisma";
 import { asyncHandler } from "../middleware/asyncHandler";
 import { HttpError } from "../lib/httpError";
-import { getTopReadBlogs, recordBlogRead } from "../lib/blogs";
+import { findPublishedBlog, getTopReadBlogs, recordBlogRead } from "../lib/blogs";
 import { sanitizeRichHtml } from "../lib/richHtml";
 import { sendContactNotification } from "../lib/mail";
 
@@ -112,13 +112,7 @@ publicRouter.get(
 publicRouter.get(
   "/blogs/:slug",
   asyncHandler(async (req, res) => {
-    const row = await prisma.blog.findFirst({
-      where: { slug: req.params.slug, published: true },
-      include: {
-        category: true,
-        tags: { include: { tag: true } },
-      },
-    });
+    const row = await findPublishedBlog(req.params.slug);
     if (!row) throw new HttpError(404, "Blog not found");
     res.json(row);
   })

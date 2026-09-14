@@ -1,6 +1,6 @@
 import { Suspense, useEffect } from 'react'
 import { BrowserRouter, Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom'
-import { localizedPath } from './utils/localePaths.js'
+import { canonicalizePathname, localizedPath, normalizeBlogLookupKey } from './utils/localePaths.js'
 import { lazyNamed } from './utils/lazyNamed.js'
 
 import { ScrollToTop } from './components/common/ScrollToTop.jsx'
@@ -42,6 +42,12 @@ function shouldDisableAos() {
 }
 
 function AppRoutes() {
+  const location = useLocation()
+  const canonical = canonicalizePathname(location.pathname)
+  if (canonical !== location.pathname) {
+    return <Navigate to={`${canonical}${location.search}${location.hash}`} replace />
+  }
+
   return (
     <Suspense fallback={null}>
       <Routes>
@@ -52,9 +58,15 @@ function AppRoutes() {
           const arPath = localizedPath(path, 'ar')
           return <Route key={arPath} path={arPath} element={element} />
         })}
+        <Route path="/blogs/show/:slug" element={<BlogPost />} />
+        <Route path="/ar/blogs/show/:slug" element={<BlogPost />} />
+        <Route path="/blogs/:slug/*" element={<BlogPost />} />
+        <Route path="/ar/blogs/:slug/*" element={<BlogPost />} />
         <Route path="/blog" element={<Navigate to="/blogs" replace />} />
         <Route path="/ar/blog" element={<Navigate to="/ar/blogs" replace />} />
+        <Route path="/blog/:slug/*" element={<BlogRedirect />} />
         <Route path="/blog/:slug" element={<BlogRedirect />} />
+        <Route path="/ar/blog/:slug/*" element={<BlogRedirect />} />
         <Route path="/ar/blog/:slug" element={<BlogRedirect />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
@@ -63,7 +75,8 @@ function AppRoutes() {
 }
 
 function BlogRedirect() {
-  const { slug } = useParams()
+  const { slug: slugParam } = useParams()
+  const slug = normalizeBlogLookupKey(slugParam)
   const { pathname } = useLocation()
   const blogsBase = localizedPath('/blogs', pathname.startsWith('/ar') ? 'ar' : 'en')
   return <Navigate to={slug ? `${blogsBase}/${slug}` : blogsBase} replace />
